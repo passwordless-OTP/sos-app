@@ -1,0 +1,31 @@
+FROM node:18-alpine
+
+# Install development tools
+RUN apk add --no-cache python3 make g++ curl git
+
+WORKDIR /app
+
+# Install global development tools
+RUN npm install -g nodemon typescript ts-node lerna
+
+# Copy package files
+COPY package*.json ./
+COPY lerna.json ./
+
+# Copy workspace package files
+COPY apps/*/package*.json ./apps/
+COPY packages/*/package*.json ./packages/
+COPY services/*/package*.json ./services/
+
+# Install all dependencies
+RUN npm install
+RUN lerna bootstrap
+
+# Copy source code
+COPY . .
+
+# Expose ports
+EXPOSE 3000 9229
+
+# Development command with hot reload
+CMD ["npm", "run", "dev"]
