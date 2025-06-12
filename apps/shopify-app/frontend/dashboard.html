@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SOS Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: -apple-system, sans-serif;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .stat-value {
+            font-size: 36px;
+            font-weight: bold;
+            color: #5c6ac4;
+        }
+        .recent-checks {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        .risk-high { color: #d72b2b; }
+        .risk-medium { color: #ff6900; }
+        .risk-low { color: #108043; }
+    </style>
+</head>
+<body>
+    <h1>SOS Fraud Detection Dashboard</h1>
+    
+    <div class="stats-grid">
+        <div class="stat-card">
+            <h3>Total Checks Today</h3>
+            <div class="stat-value" id="totalChecks">0</div>
+        </div>
+        <div class="stat-card">
+            <h3>High Risk Detected</h3>
+            <div class="stat-value risk-high" id="highRisk">0</div>
+        </div>
+        <div class="stat-card">
+            <h3>APIs Active</h3>
+            <div class="stat-value" id="apisActive">3/4</div>
+        </div>
+        <div class="stat-card">
+            <h3>Cache Hit Rate</h3>
+            <div class="stat-value" id="cacheRate">0%</div>
+        </div>
+    </div>
+    
+    <div class="recent-checks">
+        <h2>Recent Checks</h2>
+        <table id="recentTable">
+            <thead>
+                <tr>
+                    <th>Time</th>
+                    <th>Identifier</th>
+                    <th>Type</th>
+                    <th>Risk Score</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="recentBody"></tbody>
+        </table>
+    </div>
+    
+    <script>
+        // Fetch and display recent checks
+        async function updateDashboard() {
+            // This would connect to your API
+            console.log('Dashboard updating...');
+        }
+        
+        setInterval(updateDashboard, 5000);
+        updateDashboard();
+    </script>
+</body>
+</html>

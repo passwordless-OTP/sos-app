@@ -1,38 +1,58 @@
-// services/lookup-aggregator/src/index.js
-// Core lookup aggregation service - simplified version for MVP
 
 const express = require('express');
 const Redis = require('ioredis');
 const crypto = require('crypto');
+const axios = require('axios');
+require('dotenv').config();
 
 const app = express();
 const redis = new Redis(process.env.REDIS_URL || 'redis://localhost:6379');
 
 app.use(express.json());
+app.use((req, res, next) => {
+  console.log(`[${new Date().toISOString()}] ${req.method} ${req.path}`);
+  next();
+});
 
-// Simple identifier type detection
+// Enable CORS for web UI
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Headers', 'Content-Type');
+  next();
+});
+
 function detectIdentifierType(identifier) {
-  // IP Address
-  if (/^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$/.test(identifier)) {
-    return 'ip';
-  }
-  // Email
-  if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(identifier)) {
-    return 'email';
-  }
-  // Phone
-  if (/^\+?[1-9]\d{1,14}$/.test(identifier.replace(/[\s\-\(\)]/g, ''))) {
-    return 'phone';
-  }
+  if (/^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$/.test(identifier)) return 'ip';
+  if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(identifier)) return 'email';
+  if (/^\+?[1-9]\d{1,14}$/.test(identifier.replace(/[\s\-\(\)]/g, ''))) return 'phone';
   return 'unknown';
 }
 
-// Generate cache key
 function getCacheKey(type, identifier) {
   return `lookup:${type}:${crypto.createHash('md5').update(identifier).digest('hex')}`;
 }
 
-// Main lookup endpoint
+// Free IP lookup using ip-api.com
+async function checkIPAPI(ip) {
+  try {
+    const response = await axios.get(`http://ip-api.com/json/${ip}`);
+    const data = response.data;
+    const score = (data.proxy || data.hosting) ? 75 : 0;
+    return {
+      source: 'ip-api',
+      score: score,
+      factors: [
+        data.proxy && 'Proxy detected',
+        data.hosting && 'Hosting provider IP'
+      ].filter(Boolean),
+      data: data
+    };
+  } catch (error) {
+    console.error('IP-API error:', error.message);
+    return null;
+  }
+}
+
 app.post('/api/lookup', async (req, res) => {
   const startTime = Date.now();
   const { identifier } = req.body;
@@ -56,36 +76,49 @@ app.post('/api/lookup', async (req, res) => {
     return res.json(result);
   }
 
-  // TODO: Implement actual API calls
-  // For MVP, return mock data
-  const mockResult = {
+  // Perform lookup
+  let score = 0;
+  let factors = [];
+  let sources = [];
+  
+  if (type === 'ip') {
+    const ipResult = await checkIPAPI(identifier);
+    if (ipResult) {
+      score = ipResult.score;
+      factors = ipResult.factors;
+      sources = [ipResult.source];
+    }
+  } else {
+    // Mock data for email/phone until APIs are configured
+    score = Math.floor(Math.random() * 100);
+    factors = ['API keys not configured - using mock data'];
+    sources = ['mock'];
+  }
+
+  const result = {
     identifier,
     type,
-    riskScore: Math.floor(Math.random() * 100),
-    riskLevel: 'MEDIUM',
-    factors: ['Mock data - implement real APIs'],
+    riskScore: score,
+    riskLevel: score >= 75 ? 'HIGH' : score >= 50 ? 'MEDIUM' : 'LOW',
+    factors: factors.length > 0 ? factors : ['No risk factors detected'],
     recommendation: {
-      action: 'REVIEW',
-      message: 'Manual review recommended'
+      action: score >= 75 ? 'BLOCK' : score >= 50 ? 'REVIEW' : 'ALLOW',
+      message: score >= 75 ? 'High risk detected' : score >= 50 ? 'Manual review recommended' : 'Safe to proceed'
     },
-    sources: ['mock'],
-    processingTime: Date.now() - startTime
+    sources,
+    processingTime: Date.now() - startTime,
+    cached: false
   };
 
-  // Cache for 24 hours
-  await redis.setex(cacheKey, 86400, JSON.stringify(mockResult));
-
-  res.json(mockResult);
+  await redis.setex(cacheKey, 86400, JSON.stringify(result));
+  res.json(result);
 });
 
-// Health check
 app.get('/health', (req, res) => {
-  res.json({ status: 'ok', service: 'lookup-aggregator' });
+  res.json({ status: 'ok', service: 'lookup-aggregator', version: '1.0.0' });
 });
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
-  console.log(`Lookup aggregator service running on port ${PORT}`);
+  console.log(`🚀 Lookup service running on port ${PORT}`);
 });
-
-module.exports = app;
