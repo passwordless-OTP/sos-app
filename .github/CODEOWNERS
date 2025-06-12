@@ -1,0 +1,16 @@
+# This is a CODEOWNERS file
+# These owners will be the default owners for everything in the repo
+
+* @passwordless-OTP
+
+# Apps
+/apps/shopify-app/ @passwordless-OTP
+/apps/api-gateway/ @passwordless-OTP
+
+# Core packages
+/packages/risk-engine/ @passwordless-OTP
+/packages/api-clients/ @passwordless-OTP
+
+# Infrastructure
+/infrastructure/ @passwordless-OTP
+/.github/ @passwordless-OTP

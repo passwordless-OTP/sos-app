@@ -1,0 +1,37 @@
+{
+  "name": "sos-store-manager",
+  "version": "0.1.0",
+  "private": true,
+  "description": "AI-powered Shopify security intelligence network",
+  "workspaces": [
+    "apps/*",
+    "packages/*",
+    "services/*"
+  ],
+  "scripts": {
+    "dev": "lerna run dev --parallel",
+    "build": "lerna run build",
+    "test": "lerna run test",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\"",
+    "setup": "node scripts/setup.js",
+    "docker:up": "docker-compose -f infrastructure/docker/docker-compose.dev.yml up",
+    "docker:down": "docker-compose -f infrastructure/docker/docker-compose.dev.yml down"
+  },
+  "devDependencies": {
+    "@types/node": "^18.0.0",
+    "@typescript-eslint/eslint-plugin": "^5.0.0",
+    "@typescript-eslint/parser": "^5.0.0",
+    "eslint": "^8.0.0",
+    "eslint-config-prettier": "^8.0.0",
+    "eslint-plugin-react": "^7.0.0",
+    "husky": "^8.0.0",
+    "lerna": "^6.0.0",
+    "prettier": "^2.0.0",
+    "typescript": "^4.9.0"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  }
+}
