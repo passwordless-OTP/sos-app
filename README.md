@@ -10,14 +10,8 @@
 
 ```bash
 # Clone the repository
-git clone https://github.com/passwordless-OTP/SOS.git
-cd SOS
-
-# Run setup script
-./scripts/dev-setup.sh
-
-# Start development environment
-docker-compose -f infrastructure/docker/docker-compose.dev.yml up
+git clone https://github.com/passwordless-OTP/sos-app.git
+cd sos-app
 ```
 
 ## 📋 Features
