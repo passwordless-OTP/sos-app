@@ -1,0 +1,3 @@
+[submodule "apps/sosv02/apps/sosv02"]
+	path = apps/sosv02/apps/sosv02
+	url = https://github.com/passwordless-OTP/sos-app.git
