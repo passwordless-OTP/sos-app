@@ -1,0 +1,68 @@
+import { applyParams, save, ActionOptions, ReportFraudActionContext } from "gadget-server";
+
+export const run: ActionRun = async ({ params, api, logger }) => {
+  const { identifier, identifierType, shopDomain, details } = params;
+  
+  // Find existing intelligence record
+  let intel = await api.networkIntelligence.findFirst({
+    filter: { identifier: { equals: identifier } }
+  });
+  
+  if (intel) {
+    // Update existing record
+    const reportedBy = intel.reportedBy || [];
+    if (!reportedBy.includes(shopDomain)) {
+      reportedBy.push(shopDomain);
+    }
+    
+    const newRiskLevel = Math.min(100, intel.riskLevel + 10);
+    
+    await api.networkIntelligence.update(intel.id, {
+      reportCount: intel.reportCount + 1,
+      riskLevel: newRiskLevel,
+      lastReportedAt: new Date(),
+      reportedBy,
+      details: { ...intel.details, ...details }
+    });
+    
+    logger.info(`Updated intelligence for ${identifier}: risk level now ${newRiskLevel}`);
+    
+    return {
+      success: true,
+      intelligenceId: intel.id,
+      newRiskLevel,
+      totalReports: intel.reportCount + 1
+    };
+  } else {
+    // Create new record
+    intel = await api.networkIntelligence.create({
+      identifier,
+      identifierType,
+      riskLevel: 50,
+      reportCount: 1,
+      lastReportedAt: new Date(),
+      reportedBy: [shopDomain],
+      details: details || {}
+    });
+    
+    logger.info(`Created new intelligence record for ${identifier}`);
+    
+    return {
+      success: true,
+      intelligenceId: intel.id,
+      newRiskLevel: 50,
+      totalReports: 1
+    };
+  }
+};
+
+export const params = {
+  identifier: { type: "string", required: true },
+  identifierType: { type: "string", required: true },
+  shopDomain: { type: "string", required: true },
+  details: { type: "object", required: false }
+};
+
+export const options: ActionOptions = {
+  actionType: "create"
+};

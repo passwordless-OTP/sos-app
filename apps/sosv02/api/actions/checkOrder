@@ -1,0 +1,123 @@
+import { applyParams, save, ActionOptions, CheckOrderActionContext } from "gadget-server";
+
+export const run: ActionRun = async ({ params, api, logger }) => {
+  const { orderId, email, ipAddress, phone, shopDomain } = params;
+  
+  // Create fraud check record
+  const fraudCheck = await api.fraudCheck.create({
+    orderId,
+    shopDomain,
+    email,
+    ipAddress,
+    phone,
+    status: "pending",
+    riskScore: 0
+  });
+
+  try {
+    const checkResults = {};
+    const flaggedReasons = [];
+    let totalRiskScore = 0;
+    let checkCount = 0;
+
+    // Check 1: Network Intelligence
+    if (email) {
+      const emailIntel = await api.networkIntelligence.findFirst({
+        filter: { identifier: { equals: email } }
+      });
+      
+      if (emailIntel) {
+        checkCount++;
+        totalRiskScore += emailIntel.riskLevel;
+        checkResults.networkIntel = { found: true, riskLevel: emailIntel.riskLevel };
+        
+        if (emailIntel.riskLevel > 50) {
+          flaggedReasons.push(`Email reported by ${emailIntel.reportCount} shops`);
+        }
+      }
+    }
+
+    // Check 2: Email validation
+    if (email) {
+      const suspiciousDomains = ['temp-mail', 'guerrilla', '10minutemail', 'throwaway'];
+      const domain = email.split('@')[1]?.toLowerCase() || '';
+      const isSuspicious = suspiciousDomains.some(bad => domain.includes(bad));
+      
+      if (isSuspicious) {
+        checkCount++;
+        totalRiskScore += 60;
+        flaggedReasons.push('Temporary email domain detected');
+        checkResults.emailCheck = { suspicious: true, domain };
+      }
+    }
+
+    // Check 3: IP validation (simulate VPN/proxy detection)
+    if (ipAddress) {
+      // Simulate 30% chance of VPN detection for demo
+      const isVPN = Math.random() > 0.7;
+      if (isVPN) {
+        checkCount++;
+        totalRiskScore += 40;
+        flaggedReasons.push('VPN/Proxy detected');
+        checkResults.ipCheck = { vpn: true };
+      }
+    }
+
+    // Check 4: Phone validation (simulate VOIP detection)
+    if (phone) {
+      // Simulate 20% chance of VOIP for demo
+      const isVOIP = Math.random() > 0.8;
+      if (isVOIP) {
+        checkCount++;
+        totalRiskScore += 30;
+        flaggedReasons.push('VOIP number detected');
+        checkResults.phoneCheck = { voip: true };
+      }
+    }
+
+    // Calculate final score
+    const finalRiskScore = checkCount > 0 ? Math.min(100, Math.round(totalRiskScore / checkCount)) : 0;
+    
+    // Determine status
+    let status = "safe";
+    if (finalRiskScore >= 70) status = "high_risk";
+    else if (finalRiskScore >= 40) status = "suspicious";
+
+    // Update fraud check
+    await api.fraudCheck.update(fraudCheck.id, {
+      riskScore: finalRiskScore,
+      status,
+      checkResults,
+      flaggedReasons
+    });
+
+    logger.info(`Fraud check completed: ${status} (score: ${finalRiskScore})`);
+
+    return {
+      success: true,
+      fraudCheckId: fraudCheck.id,
+      riskScore: finalRiskScore,
+      status,
+      flaggedReasons
+    };
+    
+  } catch (error) {
+    await api.fraudCheck.update(fraudCheck.id, {
+      status: "error",
+      checkResults: { error: error.message }
+    });
+    throw error;
+  }
+};
+
+export const params = {
+  orderId: { type: "string", required: true },
+  shopDomain: { type: "string", required: true },
+  email: { type: "string", required: false },
+  ipAddress: { type: "string", required: false },
+  phone: { type: "string", required: false }
+};
+
+export const options: ActionOptions = {
+  actionType: "create"
+};

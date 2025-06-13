@@ -1,0 +1,60 @@
+import { applyParams, save, ActionOptions, GetDashboardStatsActionContext } from "gadget-server";
+
+export const run: ActionRun = async ({ params, api, logger }) => {
+  const { shopDomain } = params;
+  
+  // Get recent checks
+  const recentChecks = await api.fraudCheck.findMany({
+    filter: shopDomain ? { shopDomain: { equals: shopDomain } } : {},
+    sort: { createdAt: "Descending" },
+    first: 10,
+    select: {
+      id: true,
+      orderId: true,
+      email: true,
+      riskScore: true,
+      status: true,
+      flaggedReasons: true,
+      createdAt: true
+    }
+  });
+  
+  // Get total counts
+  const filter = shopDomain ? { shopDomain: { equals: shopDomain } } : {};
+  
+  const [totalChecks, highRiskCount, safeCount, suspiciousCount] = await Promise.all([
+    api.fraudCheck.count({ filter }),
+    api.fraudCheck.count({ filter: { ...filter, status: { equals: "high_risk" } } }),
+    api.fraudCheck.count({ filter: { ...filter, status: { equals: "safe" } } }),
+    api.fraudCheck.count({ filter: { ...filter, status: { equals: "suspicious" } } })
+  ]);
+  
+  // Get network stats
+  const networkStats = await api.networkIntelligence.count({});
+  
+  // Calculate block rate
+  const blockRate = totalChecks > 0 ? ((highRiskCount / totalChecks) * 100).toFixed(1) : "0.0";
+  
+  logger.info(`Dashboard stats retrieved for ${shopDomain || 'all shops'}`);
+  
+  return {
+    recentChecks,
+    stats: {
+      totalChecks,
+      highRiskCount,
+      safeCount,
+      suspiciousCount,
+      blockRate,
+      networkSize: networkStats,
+      savedAmount: highRiskCount * 127 // Average fraud prevention value
+    }
+  };
+};
+
+export const params = {
+  shopDomain: { type: "string", required: false }
+};
+
+export const options: ActionOptions = {
+  actionType: "create"
+};
