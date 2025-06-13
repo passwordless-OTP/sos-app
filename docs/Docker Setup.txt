@@ -1,0 +1,503 @@
+# docker-compose.yml
+# Complete Docker setup for SOS Store Manager
+
+version: '3.8'
+
+services:
+  # Main application container
+  app:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    container_name: sos-store-manager
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - REDIS_URL=redis://redis:6379
+      - DATABASE_URL=postgresql://sos_user:sos_password@postgres:5432/sos_store_db
+    env_file:
+      - .env.master
+    depends_on:
+      - redis
+      - postgres
+    volumes:
+      - ./src:/app/src
+      - ./public:/app/public
+      - app-logs:/app/logs
+    restart: unless-stopped
+    networks:
+      - sos-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Redis for caching API responses
+  redis:
+    image: redis:7-alpine
+    container_name: sos-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    command: redis-server --appendonly yes --maxmemory 512mb --maxmemory-policy allkeys-lru
+    networks:
+      - sos-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # PostgreSQL for storing lookup history and analytics
+  postgres:
+    image: postgres:15-alpine
+    container_name: sos-postgres
+    environment:
+      - POSTGRES_USER=sos_user
+      - POSTGRES_PASSWORD=sos_password
+      - POSTGRES_DB=sos_store_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - sos-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U sos_user -d sos_store_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Nginx reverse proxy with rate limiting
+  nginx:
+    image: nginx:alpine
+    container_name: sos-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/ssl:/etc/nginx/ssl
+      - nginx-logs:/var/log/nginx
+    depends_on:
+      - app
+    networks:
+      - sos-network
+    restart: unless-stopped
+
+  # Prometheus for monitoring
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: sos-prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus-data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+      - '--web.console.templates=/usr/share/prometheus/consoles'
+    networks:
+      - sos-network
+
+  # Grafana for visualization
+  grafana:
+    image: grafana/grafana:latest
+    container_name: sos-grafana
+    ports:
+      - "3001:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_USERS_ALLOW_SIGN_UP=false
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./monitoring/grafana/dashboards:/etc/grafana/provisioning/dashboards
+      - ./monitoring/grafana/datasources:/etc/grafana/provisioning/datasources
+    depends_on:
+      - prometheus
+    networks:
+      - sos-network
+
+  # API documentation
+  swagger:
+    image: swaggerapi/swagger-ui
+    container_name: sos-swagger
+    ports:
+      - "8080:8080"
+    environment:
+      - SWAGGER_JSON=/api-docs/swagger.json
+    volumes:
+      - ./docs/api:/api-docs
+    networks:
+      - sos-network
+
+  # Development tools container
+  dev-tools:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: sos-dev-tools
+    volumes:
+      - ./:/app
+      - /app/node_modules
+    command: npm run dev
+    ports:
+      - "3002:3000"
+      - "9229:9229"  # Node.js debugging port
+    environment:
+      - NODE_ENV=development
+    networks:
+      - sos-network
+    profiles:
+      - dev
+
+networks:
+  sos-network:
+    driver: bridge
+
+volumes:
+  app-logs:
+  redis-data:
+  postgres-data:
+  nginx-logs:
+  prometheus-data:
+  grafana-data:
+
+---
+# Dockerfile
+# Multi-stage build for production
+
+FROM node:18-alpine AS builder
+
+# Install build dependencies
+RUN apk add --no-cache python3 make g++
+
+WORKDIR /app
+
+# Copy package files
+COPY package*.json ./
+COPY yarn.lock* ./
+
+# Install dependencies
+RUN npm ci --only=production && \
+    npm cache clean --force
+
+# Copy source code
+COPY . .
+
+# Build the application
+RUN npm run build
+
+# Production stage
+FROM node:18-alpine
+
+RUN apk add --no-cache curl
+
+WORKDIR /app
+
+# Copy built application
+COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/package*.json ./
+
+# Create non-root user
+RUN addgroup -g 1001 -S nodejs && \
+    adduser -S nodejs -u 1001
+
+# Change ownership
+RUN chown -R nodejs:nodejs /app
+
+USER nodejs
+
+EXPOSE 3000
+
+CMD ["node", "dist/index.js"]
+
+---
+# Dockerfile.dev
+# Development container with hot reload
+
+FROM node:18-alpine
+
+RUN apk add --no-cache python3 make g++ curl
+
+WORKDIR /app
+
+# Install global tools
+RUN npm install -g nodemon typescript ts-node
+
+# Copy package files
+COPY package*.json ./
+
+# Install all dependencies (including dev)
+RUN npm install
+
+# Copy source
+COPY . .
+
+EXPOSE 3000 9229
+
+CMD ["npm", "run", "dev"]
+
+---
+# nginx/nginx.conf
+# Nginx configuration with rate limiting and caching
+
+user nginx;
+worker_processes auto;
+error_log /var/log/nginx/error.log warn;
+pid /var/run/nginx.pid;
+
+events {
+    worker_connections 1024;
+}
+
+http {
+    include /etc/nginx/mime.types;
+    default_type application/octet-stream;
+
+    # Logging
+    log_format main '$remote_addr - $remote_user [$time_local] "$request" '
+                    '$status $body_bytes_sent "$http_referer" '
+                    '"$http_user_agent" "$http_x_forwarded_for"';
+    
+    access_log /var/log/nginx/access.log main;
+
+    # Performance
+    sendfile on;
+    tcp_nopush on;
+    tcp_nodelay on;
+    keepalive_timeout 65;
+    gzip on;
+    gzip_types text/plain text/css application/json application/javascript text/xml application/xml application/xml+rss text/javascript;
+
+    # Rate limiting zones
+    limit_req_zone $binary_remote_addr zone=api_limit:10m rate=10r/s;
+    limit_req_zone $binary_remote_addr zone=lookup_limit:10m rate=100r/m;
+    
+    # Cache zone
+    proxy_cache_path /var/cache/nginx levels=1:2 keys_zone=api_cache:10m max_size=1g inactive=60m;
+
+    upstream app_backend {
+        server app:3000;
+        keepalive 32;
+    }
+
+    server {
+        listen 80;
+        server_name localhost;
+
+        # API endpoints with rate limiting
+        location /api/lookup {
+            limit_req zone=lookup_limit burst=20 nodelay;
+            
+            proxy_pass http://app_backend;
+            proxy_http_version 1.1;
+            proxy_set_header Connection "";
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+            
+            # Cache successful responses
+            proxy_cache api_cache;
+            proxy_cache_valid 200 1h;
+            proxy_cache_key "$request_uri|$request_body";
+            proxy_cache_methods GET POST;
+            add_header X-Cache-Status $upstream_cache_status;
+        }
+
+        location /api {
+            limit_req zone=api_limit burst=20 nodelay;
+            
+            proxy_pass http://app_backend;
+            proxy_http_version 1.1;
+            proxy_set_header Connection "";
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+        }
+
+        # Health check endpoint
+        location /health {
+            access_log off;
+            proxy_pass http://app_backend;
+        }
+
+        # Static files
+        location / {
+            proxy_pass http://app_backend;
+            proxy_http_version 1.1;
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection 'upgrade';
+            proxy_set_header Host $host;
+            proxy_cache_bypass $http_upgrade;
+        }
+    }
+}
+
+---
+# db/init.sql
+# Database initialization script
+
+-- Create tables for lookup history and analytics
+CREATE TABLE IF NOT EXISTS lookups (
+    id SERIAL PRIMARY KEY,
+    shop_id VARCHAR(255) NOT NULL,
+    lookup_type VARCHAR(50) NOT NULL,
+    identifier VARCHAR(255) NOT NULL,
+    risk_score INTEGER,
+    risk_level VARCHAR(20),
+    sources JSONB,
+    raw_results JSONB,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    processing_time_ms INTEGER
+);
+
+-- Index for performance
+CREATE INDEX idx_lookups_shop_id ON lookups(shop_id);
+CREATE INDEX idx_lookups_identifier ON lookups(identifier);
+CREATE INDEX idx_lookups_created_at ON lookups(created_at);
+
+-- Analytics table
+CREATE TABLE IF NOT EXISTS daily_stats (
+    id SERIAL PRIMARY KEY,
+    shop_id VARCHAR(255) NOT NULL,
+    date DATE NOT NULL,
+    total_lookups INTEGER DEFAULT 0,
+    high_risk_count INTEGER DEFAULT 0,
+    medium_risk_count INTEGER DEFAULT 0,
+    low_risk_count INTEGER DEFAULT 0,
+    api_costs DECIMAL(10, 2) DEFAULT 0,
+    UNIQUE(shop_id, date)
+);
+
+-- API usage tracking
+CREATE TABLE IF NOT EXISTS api_usage (
+    id SERIAL PRIMARY KEY,
+    api_name VARCHAR(100) NOT NULL,
+    date DATE NOT NULL,
+    request_count INTEGER DEFAULT 0,
+    error_count INTEGER DEFAULT 0,
+    avg_response_time_ms INTEGER,
+    UNIQUE(api_name, date)
+);
+
+-- Shop settings
+CREATE TABLE IF NOT EXISTS shop_settings (
+    shop_id VARCHAR(255) PRIMARY KEY,
+    settings JSONB DEFAULT '{}',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+---
+# monitoring/prometheus.yml
+# Prometheus configuration
+
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  - job_name: 'sos-app'
+    static_configs:
+      - targets: ['app:3000']
+    metrics_path: '/metrics'
+
+  - job_name: 'redis'
+    static_configs:
+      - targets: ['redis:6379']
+
+  - job_name: 'postgres'
+    static_configs:
+      - targets: ['postgres:5432']
+
+  - job_name: 'nginx'
+    static_configs:
+      - targets: ['nginx:80']
+
+---
+# .dockerignore
+# Files to ignore in Docker build
+
+node_modules
+npm-debug.log
+.env
+.env.*
+!.env.master
+.git
+.gitignore
+README.md
+.DS_Store
+.vscode
+.idea
+coverage
+.nyc_output
+dist
+build
+*.log
+screenshots
+api-credentials.txt
+
+---
+# docker-scripts.sh
+#!/bin/bash
+# Helper scripts for Docker operations
+
+# Start all services
+start() {
+    docker-compose up -d
+    echo "SOS Store Manager is running!"
+    echo "App: http://localhost:3000"
+    echo "API Docs: http://localhost:8080"
+    echo "Monitoring: http://localhost:3001"
+}
+
+# Stop all services
+stop() {
+    docker-compose down
+    echo "All services stopped."
+}
+
+# View logs
+logs() {
+    docker-compose logs -f "$@"
+}
+
+# Rebuild and restart
+rebuild() {
+    docker-compose build --no-cache
+    docker-compose up -d
+}
+
+# Development mode
+dev() {
+    docker-compose --profile dev up
+}
+
+# Backup data
+backup() {
+    timestamp=$(date +%Y%m%d_%H%M%S)
+    docker exec sos-postgres pg_dump -U sos_user sos_store_db > "backup_${timestamp}.sql"
+    echo "Database backed up to backup_${timestamp}.sql"
+}
+
+# Execute command
+case "$1" in
+    start) start ;;
+    stop) stop ;;
+    logs) logs "${@:2}" ;;
+    rebuild) rebuild ;;
+    dev) dev ;;
+    backup) backup ;;
+    *) echo "Usage: $0 {start|stop|logs|rebuild|dev|backup}" ;;
+esac

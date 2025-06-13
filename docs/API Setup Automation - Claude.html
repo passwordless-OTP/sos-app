@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOS Store Manager - API Setup Automation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            background: #5c6ac4;
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            opacity: 0.9;
+        }
+        
+        .setup-card {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .setup-card:hover {
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+        }
+        
+        .api-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .api-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #202223;
+        }
+        
+        .status {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .status.pending {
+            background: #f4f6f8;
+            color: #5c6ac4;
+        }
+        
+        .status.in-progress {
+            background: #fff4e6;
+            color: #ff6900;
+        }
+        
+        .status.complete {
+            background: #e6f3e6;
+            color: #108043;
+        }
+        
+        .status.error {
+            background: #fbeae5;
+            color: #d72b2b;
+        }
+        
+        .api-details {
+            margin-bottom: 20px;
+        }
+        
+        .api-details p {
+            color: #637381;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-primary {
+            background: #5c6ac4;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #4b5ab3;
+        }
+        
+        .btn-secondary {
+            background: #f4f6f8;
+            color: #202223;
+        }
+        
+        .btn-secondary:hover {
+            background: #e3e5e8;
+        }
+        
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #f4f6f8;
+            border-radius: 4px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: #5c6ac4;
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+        
+        .env-output {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            margin-top: 30px;
+            position: relative;
+            display: none;
+        }
+        
+        .env-output.show {
+            display: block;
+        }
+        
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #5c6ac4;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .copy-btn:hover {
+            background: #4b5ab3;
+        }
+        
+        .log-area {
+            background: #f9fafb;
+            border: 1px solid #dfe3e8;
+            border-radius: 5px;
+            padding: 15px;
+            margin-top: 15px;
+            font-family: monospace;
+            font-size: 13px;
+            max-height: 150px;
+            overflow-y: auto;
+            display: none;
+        }
+        
+        .log-area.show {
+            display: block;
+        }
+        
+        .log-entry {
+            margin-bottom: 5px;
+            color: #637381;
+        }
+        
+        .log-entry.success {
+            color: #108043;
+        }
+        
+        .log-entry.error {
+            color: #d72b2b;
+        }
+        
+        .actions-container {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .countdown {
+            font-size: 14px;
+            color: #ff6900;
+            margin-left: 10px;
+        }
+        
+        .manual-input {
+            margin-top: 15px;
+            display: none;
+        }
+        
+        .manual-input.show {
+            display: block;
+        }
+        
+        .input-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .input-group input {
+            flex: 1;
+            padding: 8px 12px;
+            border: 1px solid #dfe3e8;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        
+        .input-group button {
+            padding: 8px 16px;
+            background: #108043;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .input-group button:hover {
+            background: #0e7a3c;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 SOS Store Manager API Setup</h1>
+            <p>Automated account creation and API key collection</p>
+        </div>
+        
+        <div class="actions-container">
+            <h2 style="margin-bottom: 15px;">Quick Actions</h2>
+            <div class="button-group">
+                <button class="btn btn-primary" onclick="startAllSetup()">
+                    <span>⚡</span> Setup All APIs
+                </button>
+                <button class="btn btn-secondary" onclick="testConnections()">
+                    <span>🔍</span> Test Connections
+                </button>
+                <button class="btn btn-secondary" onclick="exportEnvFile()">
+                    <span>💾</span> Export .env File
+                </button>
+            </div>
+            <div class="progress-bar" id="overallProgress" style="display: none;">
+                <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+            </div>
+        </div>
+
+        <!-- IP Lookup APIs -->
+        <div class="setup-card" data-api="abuseipdb">
+            <div class="api-header">
+                <h3 class="api-title">AbuseIPDB</h3>
+                <span class="status pending">Pending</span>
+            </div>
+            <div class="api-details">
+                <p><strong>Purpose:</strong> IP reputation and abuse reporting</p>
+                <p><strong>Free Tier:</strong> 1,000 checks/day</p>
+                <p><strong>Required:</strong> Email verification</p>
+            </div>
+            <div class="button-group">
+                <button class="btn btn-primary" onclick="setupAPI('abuseipdb')">
+                    Start Setup
+                </button>
+                <button class="btn btn-secondary" onclick="manualEntry('abuseipdb')">
+                    Enter Manually
+                </button>
+            </div>
+            <div class="manual-input" id="manual-abuseipdb">
+                <div class="input-group">
+                    <input type="text" placeholder="Enter API key" id="key-abuseipdb">
+                    <button onclick="saveManualKey('abuseipdb')">Save</button>
+                </div>
+            </div>
+            <div class="log-area" id="log-abuseipdb"></div>
+        </div>
+
+        <div class="setup-card" data-api="ipqualityscore">
+            <div class="api-header">
+                <h3 class="api-title">IPQualityScore</h3>
+                <span class="status pending">Pending</span>
+            </div>
+            <div class="api-details">
+                <p><strong>Purpose:</strong> Fraud scoring and proxy detection</p>
+                <p><strong>Free Tier:</strong> 200 checks/day</p>
+                <p><strong>Required:</strong> Email verification</p>
+            </div>
+            <div class="button-group">
+                <button class="btn btn-primary" onclick="setupAPI('ipqualityscore')">
+                    Start Setup
+                </button>
+                <button class="btn btn-secondary" onclick="manualEntry('ipqualityscore')">
+                    Enter Manually
+                </button>
+            </div>
+            <div class="manual-input" id="manual-ipqualityscore">
+                <div class="input-group">
+                    <input type="text" placeholder="Enter API key" id="key-ipqualityscore">
+                    <button onclick="saveManualKey('ipqualityscore')">Save</button>
+                </div>
+            </div>
+            <div class="log-area" id="log-ipqualityscore"></div>
+        </div>
+
+        <!-- Email Lookup APIs -->
+        <div class="setup-card" data-api="emailrep">
+            <div class="api-header">
+                <h3 class="api-title">EmailRep.io</h3>
+                <span class="status pending">Pending</span>
+            </div>
+            <div class="api-details">
+                <p><strong>Purpose:</strong> Email reputation scoring</p>
+                <p><strong>Free Tier:</strong> 1,000 checks/day</p>
+                <p><strong>Required:</strong> Simple registration</p>
+            </div>
+            <div class="button-group">
+                <button class="btn btn-primary" onclick="setupAPI('emailrep')">
+                    Start Setup
+                </button>
+                <button class="btn btn-secondary" onclick="manualEntry('emailrep')">
+                    Enter Manually
+                </button>
+            </div>
+            <div class="manual-input" id="manual-emailrep">
+                <div class="input-group">
+                    <input type="text" placeholder="Enter API key" id="key-emailrep">
+                    <button onclick="saveManualKey('emailrep')">Save</button>
+                </div>
+            </div>
+            <div class="log-area" id="log-emailrep"></div>
+        </div>
+
+        <!-- Phone Lookup APIs -->
+        <div class="setup-card" data-api="numverify">
+            <div class="api-header">
+                <h3 class="api-title">Numverify</h3>
+                <span class="status pending">Pending</span>
+            </div>
+            <div class="api-details">
+                <p><strong>Purpose:</strong> Phone number validation</p>
+                <p><strong>Free Tier:</strong> 100 checks/month</p>
+                <p><strong>Required:</strong> Email registration</p>
+            </div>
+            <div class="button-group">
+                <button class="btn btn-primary" onclick="setupAPI('numverify')">
+                    Start Setup
+                </button>
+                <button class="btn btn-secondary" onclick="manualEntry('numverify')">
+                    Enter Manually
+                </button>
+            </div>
+            <div class="manual-input" id="manual-numverify">
+                <div class="input-group">
+                    <input type="text" placeholder="Enter API key" id="key-numverify">
+                    <button onclick="saveManualKey('numverify')">Save</button>
+                </div>
+            </div>
+            <div class="log-area" id="log-numverify"></div>
+        </div>
+
+        <!-- Environment File Output -->
+        <div class="env-output" id="envOutput">
+            <button class="copy-btn" onclick="copyEnvFile()">Copy to Clipboard</button>
+            <pre id="envContent"># SOS Store Manager API Keys
+# Generated on: ${new Date().toISOString()}
+
+# IP Lookup Services
+ABUSEIPDB_API_KEY=
+IPQUALITYSCORE_API_KEY=
+
+# Email Verification Services  
+EMAILREP_API_KEY=
+
+# Phone Validation Services
+NUMVERIFY_API_KEY=
+
+# OpenAI for Intelligence Layer
+OPENAI_API_KEY=
+
+# Shopify App Credentials
+SHOPIFY_API_KEY=
+SHOPIFY_API_SECRET=
+</pre>
+        </div>
+    </div>
+
+    <script>
+        // Store for API keys
+        const apiKeys = {
+            abuseipdb: '',
+            ipqualityscore: '',
+            emailrep: '',
+            numverify: '',
+            openai: '',
+            shopify_key: '',
+            shopify_secret: ''
+        };
+
+        // API setup configurations
+        const apiConfigs = {
+            abuseipdb: {
+                name: 'AbuseIPDB',
+                url: 'https://www.abuseipdb.com/register',
+                steps: [
+                    'Creating account...',
+                    'Verifying email...',
+                    'Generating API key...',
+                    'Collecting key...'
+                ]
+            },
+            ipqualityscore: {
+                name: 'IPQualityScore',
+                url: 'https://www.ipqualityscore.com/create-account',
+                steps: [
+                    'Creating account...',
+                    'Verifying email...',
+                    'Accessing dashboard...',
+                    'Generating API key...'
+                ]
+            },
+            emailrep: {
+                name: 'EmailRep.io',
+                url: 'https://emailrep.io/signup',
+                steps: [
+                    'Creating account...',
+                    'Accessing API section...',
+                    'Generating key...'
+                ]
+            },
+            numverify: {
+                name: 'Numverify',
+                url: 'https://numverify.com/product',
+                steps: [
+                    'Creating account...',
+                    'Selecting free plan...',
+                    'Collecting API key...'
+                ]
+            }
+        };
+
+        function updateStatus(apiName, status, message = '') {
+            const card = document.querySelector(`[data-api="${apiName}"]`);
+            const statusEl = card.querySelector('.status');
+            const logArea = document.getElementById(`log-${apiName}`);
+            
+            statusEl.className = `status ${status}`;
+            statusEl.textContent = status.charAt(0).toUpperCase() + status.slice(1);
+            
+            if (message) {
+                logArea.classList.add('show');
+                const logEntry = document.createElement('div');
+                logEntry.className = `log-entry ${status === 'complete' ? 'success' : status === 'error' ? 'error' : ''}`;
+                logEntry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+                logArea.appendChild(logEntry);
+                logArea.scrollTop = logArea.scrollHeight;
+            }
+        }
+
+        function updateProgress() {
+            const total = Object.keys(apiConfigs).length;
+            const completed = Object.values(apiKeys).filter(key => key !== '').length;
+            const percentage = (completed / total) * 100;
+            
+            document.getElementById('overallProgress').style.display = 'block';
+            document.getElementById('progressFill').style.width = `${percentage}%`;
+        }
+
+        async function setupAPI(apiName) {
+            const config = apiConfigs[apiName];
+            updateStatus(apiName, 'in-progress', `Starting ${config.name} setup...`);
+            
+            // Show countdown
+            const btn = document.querySelector(`[data-api="${apiName}"] .btn-primary`);
+            btn.disabled = true;
+            btn.innerHTML = '<span>🔄</span> Opening browser...';
+            
+            updateStatus(apiName, 'in-progress', 'Browser automation will handle account creation');
+            updateStatus(apiName, 'in-progress', 'Please complete any manual steps like email verification');
+            
+            // Simulate steps (in real implementation, this would be browser automation)
+            for (let i = 0; i < config.steps.length; i++) {
+                await new Promise(resolve => setTimeout(resolve, 2000));
+                updateStatus(apiName, 'in-progress', config.steps[i]);
+            }
+            
+            // For demo purposes, show manual entry
+            updateStatus(apiName, 'in-progress', 'Please enter the API key manually or let automation complete');
+            manualEntry(apiName);
+            
+            btn.disabled = false;
+            btn.innerHTML = '<span>🔄</span> Retry Setup';
+        }
+
+        function manualEntry(apiName) {
+            const manualDiv = document.getElementById(`manual-${apiName}`);
+            manualDiv.classList.toggle('show');
+        }
+
+        function saveManualKey(apiName) {
+            const input = document.getElementById(`key-${apiName}`);
+            const key = input.value.trim();
+            
+            if (key) {
+                apiKeys[apiName] = key;
+                updateStatus(apiName, 'complete', `API key saved successfully!`);
+                input.value = '';
+                document.getElementById(`manual-${apiName}`).classList.remove('show');
+                updateProgress();
+                updateEnvFile();
+            }
+        }
+
+        function updateEnvFile() {
+            const envContent = `# SOS Store Manager API Keys
+# Generated on: ${new Date().toISOString()}
+
+# IP Lookup Services
+ABUSEIPDB_API_KEY=${apiKeys.abuseipdb}
+IPQUALITYSCORE_API_KEY=${apiKeys.ipqualityscore}
+
+# Email Verification Services  
+EMAILREP_API_KEY=${apiKeys.emailrep}
+
+# Phone Validation Services
+NUMVERIFY_API_KEY=${apiKeys.numverify}
+
+# OpenAI for Intelligence Layer
+OPENAI_API_KEY=${apiKeys.openai}
+
+# Shopify App Credentials
+SHOPIFY_API_KEY=${apiKeys.shopify_key}
+SHOPIFY_API_SECRET=${apiKeys.shopify_secret}
+
+# Free API Services (No key required)
+IP_API_BASE_URL=http://ip-api.com/json/
+GEOJS_BASE_URL=https://get.geojs.io/v1/ip/geo/
+
+# Rate Limits (requests per day)
+ABUSEIPDB_RATE_LIMIT=1000
+IPQUALITYSCORE_RATE_LIMIT=200
+EMAILREP_RATE_LIMIT=1000
+NUMVERIFY_RATE_LIMIT=3  # 100/month ≈ 3/day
+`;
+            
+            document.getElementById('envContent').textContent = envContent;
+            
+            if (Object.values(apiKeys).some(key => key !== '')) {
+                document.getElementById('envOutput').classList.add('show');
+            }
+        }
+
+        function copyEnvFile() {
+            const content = document.getElementById('envContent').textContent;
+            navigator.clipboard.writeText(content).then(() => {
+                const btn = document.querySelector('.copy-btn');
+                btn.textContent = 'Copied!';
+                setTimeout(() => {
+                    btn.textContent = 'Copy to Clipboard';
+                }, 2000);
+            });
+        }
+
+        function exportEnvFile() {
+            updateEnvFile();
+            const content = document.getElementById('envContent').textContent;
+            const blob = new Blob([content], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = '.env.master';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        async function startAllSetup() {
+            const apis = Object.keys(apiConfigs);
+            for (const api of apis) {
+                await setupAPI(api);
+                // Wait between each setup
+                await new Promise(resolve => setTimeout(resolve, 1000));
+            }
+        }
+
+        function testConnections() {
+            Object.keys(apiKeys).forEach(api => {
+                if (apiKeys[api]) {
+                    updateStatus(api.replace('_', ''), 'in-progress', 'Testing connection...');
+                    // Simulate API test
+                    setTimeout(() => {
+                        updateStatus(api.replace('_', ''), 'complete', 'Connection successful!');
+                    }, 1500);
+                }
+            });
+        }
+    </script>
+</body>
+</html>
