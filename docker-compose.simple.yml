@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  sos:
+    build:
+      context: .
+      dockerfile: infrastructure/docker/Dockerfile.fixed
+    ports:
+      - "6001:6001"
+    environment:
+      - NODE_ENV=production
+      - PORT=6001
+      - REDIS_URL=redis://host.docker.internal:6379  # Connect to Redis on host
+    # volumes:
+    #   # For development, uncomment these lines:
+    #   - ./apps:/app/apps
+    #   - ./packages:/app/packages
+    #   - ./services:/app/services
+    command: npm run dev:simple

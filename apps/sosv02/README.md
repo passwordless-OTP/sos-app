@@ -3,6 +3,7 @@
 Main Shopify application built with Gadget.dev
 
 ## Features
+
 - OAuth authentication
 - Real-time risk scoring
 - Order webhook handling
@@ -25,3 +26,4 @@ shopify-app/
 ├── webhooks/     # Webhook handlers
 └── config/       # Configuration
 ```
+

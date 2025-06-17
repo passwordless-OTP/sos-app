@@ -1,5 +1,6 @@
 import { Meta, Links, Scripts, ScrollRestoration, useLoaderData, useLocation, Outlet } from "@remix-run/react";
 import { json, type LoaderFunctionArgs } from "@remix-run/node";
+import { Suspense } from "react";
 import { AppProvider } from "@shopify/polaris";
 import enTranslations from "@shopify/polaris/locales/en.json";
 import {
@@ -8,7 +9,6 @@ import {
 } from "@gadgetinc/react-shopify-app-bridge";
 import "./app.css";
 import polarisStyles from "@shopify/polaris/build/esm/styles.css?url";
-import { Suspense } from "react";
 import { api } from "./api";
 import { AdaptorLink } from "./components/AdaptorLink";
 import { FullPageSpinner } from "./components/FullPageSpinner";

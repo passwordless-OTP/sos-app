@@ -51,3 +51,7 @@ pids/
 *.pid
 *.seed
 *.pid.lock
+# Browser profiles and screenshots
+.browser-profiles/
+dashboard-screenshot.png
+cookies.json

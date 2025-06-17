@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Gadget API</title>
+</head>
+<body>
+    <h1>Testing Gadget API in Browser</h1>
+    <button onclick="testAPI()">Test getTodaysSales</button>
+    <pre id="results"></pre>
+
+    <script type="module">
+        window.testAPI = async function() {
+            const results = document.getElementById('results');
+            results.textContent = 'Testing API...\n';
+            
+            try {
+                // Import the API client
+                const { api } = await import('/web/api.ts');
+                results.textContent += '✅ API client imported\n';
+                
+                // Call getTodaysSales with shop ID 1
+                const response = await api.getTodaysSales({ shopId: "1" });
+                results.textContent += '✅ API call completed\n';
+                results.textContent += JSON.stringify(response, null, 2);
+                
+            } catch (error) {
+                results.textContent += '❌ Error: ' + error.message + '\n';
+                results.textContent += error.stack;
+            }
+        }
+    </script>
+</body>
+</html>

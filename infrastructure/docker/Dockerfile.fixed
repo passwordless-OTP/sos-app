@@ -1,0 +1,43 @@
+FROM node:18-alpine
+
+# Install build dependencies with python3-dev for complete Python support
+RUN apk add --no-cache \
+    python3 \
+    python3-dev \
+    py3-pip \
+    make \
+    g++ \
+    curl \
+    git \
+    # Additional build tools that might be needed
+    build-base \
+    libc6-compat
+
+WORKDIR /app
+
+# Install global tools
+RUN npm install -g lerna typescript
+
+# Copy root package files first
+COPY package*.json ./
+COPY lerna.json ./
+
+# Copy all workspace package.json files to preserve structure
+COPY apps/*/package*.json apps/
+COPY packages/*/package*.json packages/
+COPY services/*/package*.json services/
+
+# Install all dependencies with workspaces (Lerna v7 uses npm workspaces)
+RUN npm ci --legacy-peer-deps
+
+# Copy all source code
+COPY . .
+
+# Build all packages (even if none have build scripts currently)
+RUN npm run build || true
+
+# Expose port 6001
+EXPOSE 6001
+
+# Start the lookup-aggregator service
+CMD ["npm", "run", "dev:simple"]

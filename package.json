@@ -17,7 +17,12 @@
     "setup": "node scripts/setup.js",
     "docker:up": "docker-compose -f infrastructure/docker/docker-compose.dev.yml up",
     "docker:down": "docker-compose -f infrastructure/docker/docker-compose.dev.yml down",
-    "dev:simple": "node services/lookup-aggregator/src/index.js"
+    "dev:simple": "node services/lookup-aggregator/src/index.js",
+    "test:functional": "node test-framework/run-tests.js",
+    "test:functional:headless": "node test-framework/run-tests.js --headless",
+    "test:functional:record": "node test-framework/run-tests.js --record",
+    "test:ui": "node test-framework/ui-visual-tests.js",
+    "test:ui:headless": "HEADLESS=true node test-framework/ui-visual-tests.js"
   },
   "devDependencies": {
     "@types/node": "^18.0.0",

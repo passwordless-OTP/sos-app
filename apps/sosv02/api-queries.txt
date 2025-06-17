@@ -1,0 +1,19 @@
+// Query 1: Get shops (run this first)
+const shops = await api.shopifyShop.findMany();
+console.log("Shops:", shops);
+
+// Query 2: Get first shop details
+const shop = shops[0];
+console.log("First shop:", shop);
+
+// Query 3: Test getTodaysSales (replace the shopId with actual ID from above)
+const salesResult = await api.getTodaysSales({ shopId: "1" });
+console.log("Sales result:", salesResult);
+
+// Query 4: Get fraud checks
+const fraudChecks = await api.fraudCheck.findMany({ first: 5 });
+console.log("Fraud checks:", fraudChecks);
+
+// Query 5: Get dashboard stats
+const stats = await api.getDashboardStats({});
+console.log("Stats:", stats);
