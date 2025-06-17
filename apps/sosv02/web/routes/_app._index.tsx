@@ -765,6 +765,92 @@ export default function Dashboard() {
             </Layout.Section>
           </Layout>
 
+          {/* Customer Risk Intelligence Section */}
+          <Card>
+            <Box padding="600">
+              <BlockStack gap="400">
+                <InlineStack align="space-between" blockAlign="center">
+                  <InlineStack gap="200" blockAlign="center">
+                    <Icon source={TeamIcon} tone="critical" />
+                    <Text variant="headingLg" as="h2">Customer Risk Intelligence</Text>
+                  </InlineStack>
+                  <Badge tone="info">Network Powered</Badge>
+                </InlineStack>
+                
+                {/* Customer Health Overview */}
+                <Box background="bg-surface-secondary" padding="400" borderRadius="200">
+                  <BlockStack gap="300">
+                    <InlineStack align="space-between">
+                      <Text variant="headingSm">Your Customer Health Score</Text>
+                      <Text variant="headingLg" fontWeight="bold" tone="success">94%</Text>
+                    </InlineStack>
+                    
+                    <ProgressBar progress={94} tone="success" />
+                    
+                    <InlineGrid columns={3} gap="200">
+                      <Box>
+                        <Text variant="bodySm" tone="subdued">Clean Customers</Text>
+                        <Text variant="headingMd" fontWeight="semibold" tone="success">9,412</Text>
+                      </Box>
+                      <Box>
+                        <Text variant="bodySm" tone="subdued">Unknown/New</Text>
+                        <Text variant="headingMd" fontWeight="semibold" tone="warning">483</Text>
+                      </Box>
+                      <Box>
+                        <Text variant="bodySm" tone="subdued">Flagged by Network</Text>
+                        <Text variant="headingMd" fontWeight="semibold" tone="critical">105</Text>
+                      </Box>
+                    </InlineGrid>
+                  </BlockStack>
+                </Box>
+                
+                {/* High Risk Customers Table */}
+                <BlockStack gap="300">
+                  <Text variant="headingSm">High Risk Customers (Network Intelligence)</Text>
+                  <DataTable
+                    columnContentTypes={[
+                      'text',
+                      'text',
+                      'numeric',
+                      'text',
+                      'text',
+                    ]}
+                    headings={[
+                      'Customer',
+                      'Risk Level',
+                      'Network Flags',
+                      'Last Order',
+                      'Action',
+                    ]}
+                    rows={[
+                      [
+                        'john.smith@email.com',
+                        <Badge tone="critical">High</Badge>,
+                        '7 stores',
+                        '2 days ago',
+                        <Button size="slim" tone="critical">Block</Button>,
+                      ],
+                      [
+                        'sarah.wilson@email.com',
+                        <Badge tone="warning">Medium</Badge>,
+                        '3 stores',
+                        '1 week ago',
+                        <Button size="slim">Review</Button>,
+                      ],
+                      [
+                        'mike.brown@email.com',
+                        <Badge tone="warning">Medium</Badge>,
+                        '2 stores',
+                        '3 days ago',
+                        <Button size="slim">Review</Button>,
+                      ],
+                    ]}
+                  />
+                </BlockStack>
+              </BlockStack>
+            </Box>
+          </Card>
+
           {/* Network Effect Demo Section */}
           <Card>
             <Box padding="600">
@@ -783,88 +869,528 @@ export default function Dashboard() {
                   </Button>
                 </InlineStack>
                 
-                {/* Waze-like Map Visualization */}
+                {/* Network Economics Dashboard */}
                 <Box background="bg-surface-subdued" padding="400" borderRadius="200">
                   <BlockStack gap="300">
                     <InlineStack gap="200" blockAlign="center" align="space-between">
-                      <Text variant="headingSm" as="h3">Live Fraud Map - "Waze for E-commerce"</Text>
-                      <Badge tone="success">Real-time</Badge>
+                      <Text variant="headingSm" as="h3">Network Trust Economy</Text>
+                      <Badge tone="success">LIVE</Badge>
                     </InlineStack>
                     
-                    {/* Simple SVG Map */}
+                    {/* Network Metrics */}
+                    <Box background="bg-surface" padding="300" borderRadius="100">
+                      <InlineGrid columns={4} gap="300">
+                        <BlockStack gap="100">
+                          <Text variant="bodySm" tone="subdued">Active Stores</Text>
+                          <Text variant="headingMd" fontWeight="semibold">{networkSize.toLocaleString()}</Text>
+                          <Text variant="bodySm" tone="success">↑ 127 today</Text>
+                        </BlockStack>
+                        <BlockStack gap="100">
+                          <Text variant="bodySm" tone="subdued">Signals/sec</Text>
+                          <Text variant="headingMd" fontWeight="semibold">3,247</Text>
+                          <Text variant="bodySm" tone="subdued">Real-time</Text>
+                        </BlockStack>
+                        <BlockStack gap="100">
+                          <Text variant="bodySm" tone="subdued">Trust Actions</Text>
+                          <Text variant="headingMd" fontWeight="semibold">48.2K</Text>
+                          <Text variant="bodySm" tone="success">Today</Text>
+                        </BlockStack>
+                        <BlockStack gap="100">
+                          <Text variant="bodySm" tone="subdued">Value Protected</Text>
+                          <Text variant="headingMd" fontWeight="semibold">$1.3M</Text>
+                          <Text variant="bodySm" tone="success">This week</Text>
+                        </BlockStack>
+                      </InlineGrid>
+                    </Box>
+                    
+                    {/* Real-time Activity Feed */}
+                    <Box background="bg-surface" padding="300" borderRadius="100">
+                      <BlockStack gap="200">
+                        <Text variant="headingSm">Live Network Activity</Text>
+                        <BlockStack gap="100">
+                          <InlineStack gap="200" wrap={false}>
+                            <Badge tone="critical">BLOCK</Badge>
+                            <Text variant="bodySm">Miami store blocked IP 192.168.x.x • Saved $2,340</Text>
+                            <Text variant="bodySm" tone="subdued">2s ago</Text>
+                          </InlineStack>
+                          <InlineStack gap="200" wrap={false}>
+                            <Badge tone="success">TRUST</Badge>
+                            <Text variant="bodySm">LA store whitelisted customer@email.com • 47 stores benefit</Text>
+                            <Text variant="bodySm" tone="subdued">5s ago</Text>
+                          </InlineStack>
+                          <InlineStack gap="200" wrap={false}>
+                            <Badge tone="warning">FLAG</Badge>
+                            <Text variant="bodySm">NYC store flagged suspicious pattern • Network alerted</Text>
+                            <Text variant="bodySm" tone="subdued">8s ago</Text>
+                          </InlineStack>
+                          <InlineStack gap="200" wrap={false}>
+                            <Badge tone="info">PROBE</Badge>
+                            <Text variant="bodySm">Chicago store queried customer risk • Network responded in 43ms</Text>
+                            <Text variant="bodySm" tone="subdued">12s ago</Text>
+                          </InlineStack>
+                        </BlockStack>
+                      </BlockStack>
+                    </Box>
+                  </BlockStack>
+                </Box>
+                
+                {/* MAIN CONCEPT: Active Store Network Communication */}
+                <Box background="bg-surface-subdued" padding="400" borderRadius="200">
+                  <BlockStack gap="300">
+                    <InlineStack gap="200" blockAlign="center" align="space-between">
+                      <Text variant="headingSm" as="h3">SOS Network Intelligence Exchange</Text>
+                      <Badge tone="success">LIVE</Badge>
+                    </InlineStack>
+                    
+                    {/* Active Network Visualization */}
                     <Box>
-                      <svg width="100%" height="200" viewBox="0 0 600 200" style={{ background: '#f0f0f0', borderRadius: '8px' }}>
-                        {/* US Map simplified outline */}
-                        <path d="M 50 100 L 150 80 L 250 90 L 350 85 L 450 95 L 550 100 L 550 150 L 450 160 L 350 155 L 250 160 L 150 150 L 50 140 Z" 
-                              fill="#e0e0e0" stroke="#999" strokeWidth="1"/>
+                      <svg width="100%" height="350" viewBox="0 0 800 350" style={{ background: '#0a0f1b', borderRadius: '8px' }}>
+                        <defs>
+                          {/* Gradient for network core */}
+                          <radialGradient id="networkCore">
+                            <stop offset="0%" stopColor="#00ff88" stopOpacity="0.8"/>
+                            <stop offset="100%" stopColor="#00ff88" stopOpacity="0.1"/>
+                          </radialGradient>
+                          
+                          {/* Animation for data packets */}
+                          <circle id="dataPacket" r="3" fill="#00ff88">
+                            <animate attributeName="opacity" values="0;1;0" dur="2s" repeatCount="indefinite"/>
+                          </circle>
+                          
+                          <circle id="probePacket" r="4" fill="#00aaff">
+                            <animate attributeName="opacity" values="0;1;0" dur="1.5s" repeatCount="indefinite"/>
+                          </circle>
+                          
+                          <circle id="alertPacket" r="4" fill="#ff4444">
+                            <animate attributeName="opacity" values="0;1;0" dur="1s" repeatCount="indefinite"/>
+                          </circle>
+                        </defs>
                         
-                        {/* City dots */}
-                        <circle cx="150" cy="100" r="4" fill="#666">
-                          <title>Miami</title>
-                        </circle>
-                        <circle cx="350" cy="90" r="4" fill="#666">
-                          <title>NYC</title>
-                        </circle>
-                        <circle cx="450" cy="95" r="4" fill="#666">
-                          <title>LA</title>
+                        {/* Central Network Core */}
+                        <circle cx="400" cy="175" r="60" fill="url(#networkCore)"/>
+                        <circle cx="400" cy="175" r="40" fill="none" stroke="#00ff88" strokeWidth="2" opacity="0.8">
+                          <animate attributeName="r" values="40;50;40" dur="3s" repeatCount="indefinite"/>
+                          <animate attributeName="opacity" values="0.8;0.3;0.8" dur="3s" repeatCount="indefinite"/>
                         </circle>
                         
-                        {/* Animated fraud detection */}
+                        {/* SOS Logo in center */}
+                        <text x="400" y="180" fill="white" fontSize="24" textAnchor="middle" fontWeight="bold">SOS</text>
+                        <text x="400" y="195" fill="#00ff88" fontSize="10" textAnchor="middle">NETWORK</text>
+                        
+                        {/* Store Nodes */}
+                        {/* Top stores */}
+                        <g id="store1">
+                          <circle cx="400" cy="50" r="20" fill="#1a2332" stroke="#00aaff" strokeWidth="2"/>
+                          <text x="400" y="55" fill="white" fontSize="10" textAnchor="middle">STORE</text>
+                          <line x1="400" y1="70" x2="400" y2="115" stroke="#00aaff" strokeWidth="1" opacity="0.3"/>
+                        </g>
+                        
+                        <g id="store2">
+                          <circle cx="250" cy="100" r="20" fill="#1a2332" stroke="#00ff88" strokeWidth="2"/>
+                          <text x="250" y="105" fill="white" fontSize="10" textAnchor="middle">STORE</text>
+                          <line x1="270" y1="100" x2="340" y2="135" stroke="#00ff88" strokeWidth="1" opacity="0.3"/>
+                        </g>
+                        
+                        <g id="store3">
+                          <circle cx="550" cy="100" r="20" fill="#1a2332" stroke="#00ff88" strokeWidth="2"/>
+                          <text x="550" y="105" fill="white" fontSize="10" textAnchor="middle">STORE</text>
+                          <line x1="530" y1="100" x2="460" y2="135" stroke="#00ff88" strokeWidth="1" opacity="0.3"/>
+                        </g>
+                        
+                        {/* Bottom stores */}
+                        <g id="store4">
+                          <circle cx="250" cy="250" r="20" fill="#1a2332" stroke="#ffaa00" strokeWidth="2"/>
+                          <text x="250" y="255" fill="white" fontSize="10" textAnchor="middle">STORE</text>
+                          <line x1="270" y1="250" x2="340" y2="215" stroke="#ffaa00" strokeWidth="1" opacity="0.3"/>
+                        </g>
+                        
+                        <g id="store5">
+                          <circle cx="400" cy="300" r="20" fill="#1a2332" stroke="#ff4444" strokeWidth="2"/>
+                          <text x="400" y="305" fill="white" fontSize="10" textAnchor="middle">STORE</text>
+                          <line x1="400" y1="280" x2="400" y2="235" stroke="#ff4444" strokeWidth="1" opacity="0.3"/>
+                        </g>
+                        
+                        <g id="store6">
+                          <circle cx="550" cy="250" r="20" fill="#1a2332" stroke="#00ff88" strokeWidth="2"/>
+                          <text x="550" y="255" fill="white" fontSize="10" textAnchor="middle">STORE</text>
+                          <line x1="530" y1="250" x2="460" y2="215" stroke="#00ff88" strokeWidth="1" opacity="0.3"/>
+                        </g>
+                        
+                        {/* Animated data flows */}
+                        {/* Store 1 sending probe */}
+                        <circle r="4" fill="#00aaff">
+                          <animateMotion dur="2s" repeatCount="indefinite">
+                            <mpath href="#probe-path-1"/>
+                          </animateMotion>
+                          <animate attributeName="opacity" values="0;1;1;0" dur="2s" repeatCount="indefinite"/>
+                        </circle>
+                        <path id="probe-path-1" d="M 400,70 Q 400,120 400,115" fill="none"/>
+                        
+                        {/* Store 2 sending login event */}
+                        <circle r="3" fill="#00ff88">
+                          <animateMotion dur="1.5s" repeatCount="indefinite">
+                            <mpath href="#event-path-2"/>
+                          </animateMotion>
+                          <animate attributeName="opacity" values="0;1;1;0" dur="1.5s" repeatCount="indefinite"/>
+                        </circle>
+                        <path id="event-path-2" d="M 270,100 L 340,135" fill="none"/>
+                        
+                        {/* Store 5 sending fraud alert */}
                         {networkAlerts.length > 0 && (
                           <>
-                            {/* Pulsing red circle at fraud location */}
-                            <circle cx="150" cy="100" r="8" fill="none" stroke="#dc2626" strokeWidth="2">
-                              <animate attributeName="r" values="8;20;8" dur="2s" repeatCount="indefinite"/>
-                              <animate attributeName="opacity" values="1;0;1" dur="2s" repeatCount="indefinite"/>
+                            <circle r="5" fill="#ff4444">
+                              <animateMotion dur="1s" repeatCount="indefinite">
+                                <mpath href="#alert-path-5"/>
+                              </animateMotion>
+                              <animate attributeName="opacity" values="0;1;1;0" dur="1s" repeatCount="indefinite"/>
                             </circle>
+                            <path id="alert-path-5" d="M 400,280 L 400,235" fill="none"/>
                             
-                            {/* Protection spreading to other stores */}
-                            <circle cx="350" cy="90" r="8" fill="none" stroke="#16a34a" strokeWidth="2" opacity="0">
-                              <animate attributeName="opacity" values="0;1;1" begin="1s" dur="1s" fill="freeze"/>
-                              <animate attributeName="r" values="8;15;8" begin="1s" dur="1s" repeatCount="3"/>
-                            </circle>
-                            
-                            <circle cx="450" cy="95" r="8" fill="none" stroke="#16a34a" strokeWidth="2" opacity="0">
-                              <animate attributeName="opacity" values="0;1;1" begin="1.5s" dur="1s" fill="freeze"/>
-                              <animate attributeName="r" values="8;15;8" begin="1.5s" dur="1s" repeatCount="3"/>
+                            {/* Network broadcasting alert */}
+                            <circle cx="400" cy="175" r="20" fill="none" stroke="#ff4444" strokeWidth="3">
+                              <animate attributeName="r" values="60;120;60" dur="2s" begin="1s" repeatCount="indefinite"/>
+                              <animate attributeName="opacity" values="1;0;1" dur="2s" begin="1s" repeatCount="indefinite"/>
                             </circle>
                           </>
                         )}
                         
-                        {/* Labels */}
-                        <text x="150" y="120" textAnchor="middle" fontSize="10" fill="#666">Miami</text>
-                        <text x="350" y="110" textAnchor="middle" fontSize="10" fill="#666">NYC</text>
-                        <text x="450" y="115" textAnchor="middle" fontSize="10" fill="#666">LA</text>
+                        {/* Event labels */}
+                        <text x="420" y="90" fill="#00aaff" fontSize="8" opacity="0.8">PROBE</text>
+                        <text x="300" y="115" fill="#00ff88" fontSize="8" opacity="0.8">LOGIN</text>
+                        <text x="480" y="115" fill="#00ff88" fontSize="8" opacity="0.8">BLOCKED</text>
+                        <text x="300" y="235" fill="#ffaa00" fontSize="8" opacity="0.8">FLAGGED</text>
+                        {networkAlerts.length > 0 && (
+                          <text x="420" y="260" fill="#ff4444" fontSize="8" fontWeight="bold">FRAUD!</text>
+                        )}
                         
-                        {/* Legend */}
-                        <circle cx="20" cy="20" r="4" fill="#dc2626"/>
-                        <text x="30" y="24" fontSize="10" fill="#666">Fraud Detected</text>
-                        
-                        <circle cx="20" cy="35" r="4" fill="#16a34a"/>
-                        <text x="30" y="39" fontSize="10" fill="#666">Store Protected</text>
+                        {/* Network stats with signal types */}
+                        <text x="20" y="20" fill="#00ff88" fontSize="10" opacity="0.8">
+                          PROBE: 892/min • LOGIN: 2.3K/min • BLOCK: 147/min • FLAG: 83/min • TRUST: 421/min
+                        </text>
+                        <text x="20" y="330" fill="#00ff88" fontSize="10">
+                          Active Stores: {networkSize} | Events/sec: 3,247 | Network Value: $1.3M protected
+                        </text>
                       </svg>
                     </Box>
                     
-                    {/* Waze-like status text */}
-                    {networkAlerts.length > 0 ? (
-                      <Box background="bg-surface-critical" padding="200" borderRadius="100">
-                        <InlineStack gap="200" blockAlign="center">
-                          <Icon source={AlertCircleIcon} tone="critical" />
-                          <Text variant="bodySm" fontWeight="semibold">
-                            Fraud route detected: Miami → NYC → LA. Network protecting stores...
-                          </Text>
-                        </InlineStack>
-                      </Box>
-                    ) : (
-                      <Box background="bg-surface-success" padding="200" borderRadius="100">
-                        <InlineStack gap="200" blockAlign="center">
-                          <Icon source={CashDollarIcon} tone="success" />
-                          <Text variant="bodySm">
-                            All routes clear. Network monitoring 17,453 stores.
-                          </Text>
-                        </InlineStack>
-                      </Box>
-                    )}
+                    {/* Status message */}
+                    <Box background={networkAlerts.length > 0 ? "bg-surface-critical" : "bg-surface-success"} padding="200" borderRadius="100">
+                      <InlineStack gap="200" blockAlign="center">
+                        <Icon source={networkAlerts.length > 0 ? AlertCircleIcon : TeamIcon} tone={networkAlerts.length > 0 ? "critical" : "success"} />
+                        <Text variant="bodySm" fontWeight="semibold">
+                          {networkAlerts.length > 0 
+                            ? "Fraud detected! Network broadcasting alert to all connected stores..." 
+                            : "Network operating normally. Stores sharing security signals in real-time."}
+                        </Text>
+                      </InlineStack>
+                    </Box>
+                  </BlockStack>
+                </Box>
+                
+                {/* Jony Ive Inspired Visualization - A Breathing Circle of Light */}
+                <Box background="bg-surface" padding="400" borderRadius="200">
+                  <BlockStack gap="300">
+                    <InlineStack gap="200" blockAlign="center" align="space-between">
+                      <Text variant="headingSm" as="h3">Community Protection</Text>
+                      <Badge tone="info">LIVE</Badge>
+                    </InlineStack>
+                    
+                    <Box>
+                      <svg width="100%" height="400" viewBox="0 0 800 400" style={{ background: '#000', borderRadius: '12px' }}>
+                        <defs>
+                          {/* Soft gradient for the protective halo */}
+                          <radialGradient id="protectiveHalo">
+                            <stop offset="0%" stopColor="#ffffff" stopOpacity="0.15"/>
+                            <stop offset="50%" stopColor="#ffffff" stopOpacity="0.05"/>
+                            <stop offset="100%" stopColor="#ffffff" stopOpacity="0"/>
+                          </radialGradient>
+                          
+                          {/* Individual store light gradient */}
+                          <radialGradient id="storeLight">
+                            <stop offset="0%" stopColor="#ffffff" stopOpacity="1"/>
+                            <stop offset="50%" stopColor="#ffffff" stopOpacity="0.6"/>
+                            <stop offset="100%" stopColor="#ffffff" stopOpacity="0"/>
+                          </radialGradient>
+                          
+                          {/* Threat gradient */}
+                          <radialGradient id="threatApproach">
+                            <stop offset="0%" stopColor="#ff6b6b" stopOpacity="0.3"/>
+                            <stop offset="100%" stopColor="#ff6b6b" stopOpacity="0"/>
+                          </radialGradient>
+                        </defs>
+                        
+                        {/* Your store - central breathing light */}
+                        <circle cx="400" cy="200" r="8" fill="url(#storeLight)">
+                          <animate attributeName="r" values="8;12;8" dur="4s" repeatCount="indefinite"/>
+                          <animate attributeName="opacity" values="0.8;1;0.8" dur="4s" repeatCount="indefinite"/>
+                        </circle>
+                        
+                        {/* Surrounding stores - points of light forming protective circle */}
+                        {[...Array(12)].map((_, i) => {
+                          const angle = (i * 30) * Math.PI / 180;
+                          const radius = 120;
+                          const x = 400 + Math.cos(angle) * radius;
+                          const y = 200 + Math.sin(angle) * radius;
+                          const delay = i * 0.3;
+                          
+                          return (
+                            <g key={i}>
+                              <circle cx={x} cy={y} r="4" fill="white" opacity="0.6">
+                                <animate 
+                                  attributeName="opacity" 
+                                  values="0.6;0.8;0.6" 
+                                  dur="6s" 
+                                  begin={`${delay}s`}
+                                  repeatCount="indefinite"/>
+                              </circle>
+                              {/* Connection to center - subtle, almost invisible */}
+                              <line x1="400" y1="200" x2={x} y2={y} stroke="white" strokeWidth="0.5" opacity="0.1"/>
+                            </g>
+                          );
+                        })}
+                        
+                        {/* When threat detected - stores brighten in response */}
+                        {networkAlerts.length > 0 && (
+                          <>
+                            {/* Threat approaching from outside */}
+                            <circle cx="600" cy="100" r="40" fill="url(#threatApproach)">
+                              <animate attributeName="r" values="40;60;40" dur="2s" repeatCount="indefinite"/>
+                            </circle>
+                            
+                            {/* Protective halo forms */}
+                            <circle cx="400" cy="200" r="150" fill="url(#protectiveHalo)">
+                              <animate attributeName="r" values="120;180;120" dur="3s" repeatCount="indefinite"/>
+                              <animate attributeName="opacity" values="0;0.3;0" dur="3s" repeatCount="indefinite"/>
+                            </circle>
+                            
+                            {/* Nearby stores brighten in solidarity */}
+                            {[...Array(5)].map((_, i) => {
+                              const angle = ((i * 72) + 36) * Math.PI / 180;
+                              const radius = 80;
+                              const x = 400 + Math.cos(angle) * radius;
+                              const y = 200 + Math.sin(angle) * radius;
+                              
+                              return (
+                                <circle key={`bright-${i}`} cx={x} cy={y} r="6" fill="white" opacity="0.9">
+                                  <animate attributeName="r" values="4;8;4" dur="2s" repeatCount="indefinite"/>
+                                  <animate attributeName="opacity" values="0.6;1;0.6" dur="2s" repeatCount="indefinite"/>
+                                </circle>
+                              );
+                            })}
+                          </>
+                        )}
+                        
+                        {/* Subtle movement - stores drift slightly, like breathing */}
+                        <g opacity="0.4">
+                          {[...Array(20)].map((_, i) => {
+                            const x = Math.random() * 800;
+                            const y = Math.random() * 400;
+                            const size = Math.random() * 2 + 1;
+                            const duration = Math.random() * 10 + 20;
+                            
+                            return (
+                              <circle key={`ambient-${i}`} cx={x} cy={y} r={size} fill="white" opacity="0.3">
+                                <animateTransform
+                                  attributeName="transform"
+                                  type="translate"
+                                  values="0,0; 10,-10; -10,10; 0,0"
+                                  dur={`${duration}s`}
+                                  repeatCount="indefinite"/>
+                              </circle>
+                            );
+                          })}
+                        </g>
+                        
+                        {/* Single word of reassurance */}
+                        <text x="400" y="350" fill="white" fontSize="14" textAnchor="middle" opacity="0.6" fontWeight="300">
+                          {networkAlerts.length > 0 ? "Protected" : "Connected"}
+                        </text>
+                      </svg>
+                    </Box>
+                    
+                    {/* Minimal status - almost invisible */}
+                    <Box>
+                      <Text variant="bodySm" tone="subdued" alignment="center">
+                        {networkSize.toLocaleString()} stores • {networkAlerts.length > 0 ? "Threat detected" : "All clear"}
+                      </Text>
+                    </Box>
+                    
+                    {/* High-level indicators */}
+                    <Box padding="300" background="bg-surface" borderRadius="100">
+                      <InlineGrid columns={3} gap="400">
+                        <Box>
+                          <Text variant="bodyMd" tone="subdued">Customer Health</Text>
+                          <Text variant="headingLg" fontWeight="semibold">94%</Text>
+                          <Text variant="bodySm" tone="subdued">6% flagged</Text>
+                        </Box>
+                        <Box>
+                          <Text variant="bodyMd" tone="subdued">Threats Today</Text>
+                          <Text variant="headingLg" fontWeight="semibold">47</Text>
+                          <Text variant="bodySm" tone="success">$5,420 saved</Text>
+                        </Box>
+                        <Box>
+                          <Text variant="bodyMd" tone="subdued">Network Alert</Text>
+                          <Text variant="bodyMd" fontWeight="semibold">Card Testing</Text>
+                          <Text variant="bodySm" tone="subdued">NYC area</Text>
+                        </Box>
+                      </InlineGrid>
+                    </Box>
+                  </BlockStack>
+                </Box>
+
+                {/* Removed other concepts - focusing on the Network Intelligence Exchange */}
+                <Box background="bg-surface-subdued" padding="400" borderRadius="200">
+                  <BlockStack gap="300">
+                    <InlineStack gap="200" blockAlign="center" align="space-between">
+                      <Text variant="headingSm" as="h3">Fraud Contagion Tracker™</Text>
+                      <Badge tone="critical">LIVE</Badge>
+                    </InlineStack>
+                    
+                    <Box>
+                      <div style={{ 
+                        background: '#000', 
+                        borderRadius: '8px', 
+                        padding: '20px',
+                        position: 'relative',
+                        height: '300px',
+                        overflow: 'hidden'
+                      }}>
+                        {/* Particle system effect */}
+                        <style>{`
+                          @keyframes float {
+                            0% { transform: translate(0, 0) scale(1); opacity: 0.8; }
+                            50% { transform: translate(30px, -30px) scale(1.5); opacity: 1; }
+                            100% { transform: translate(60px, 0) scale(0.5); opacity: 0; }
+                          }
+                          .virus-particle {
+                            position: absolute;
+                            width: 8px;
+                            height: 8px;
+                            background: #ff0000;
+                            border-radius: 50%;
+                            animation: float 3s infinite;
+                          }
+                          .protected-particle {
+                            position: absolute;
+                            width: 12px;
+                            height: 12px;
+                            background: #00ff00;
+                            border-radius: 50%;
+                            animation: float 4s infinite reverse;
+                          }
+                        `}</style>
+                        
+                        <div style={{ color: '#fff', textAlign: 'center', marginTop: '20px' }}>
+                          <h2 style={{ fontSize: '48px', margin: 0, fontWeight: 'bold' }}>
+                            {networkAlerts.length > 0 ? '⚠️ FRAUD OUTBREAK' : '✅ NETWORK HEALTHY'}
+                          </h2>
+                          <p style={{ fontSize: '24px', color: '#ff6b6b', margin: '10px 0' }}>
+                            R₀ = 3.7 (1 fraud → 3.7 victims)
+                          </p>
+                          <div style={{ fontSize: '18px', marginTop: '20px' }}>
+                            <span style={{ color: '#ff0000' }}>● Infected: 1</span>
+                            <span style={{ margin: '0 20px', color: '#ffaa00' }}>● At Risk: 3</span>
+                            <span style={{ color: '#00ff00' }}>● Protected: {networkSize}</span>
+                          </div>
+                        </div>
+                        
+                        {/* Animated particles */}
+                        {networkAlerts.length > 0 && (
+                          <>
+                            <div className="virus-particle" style={{ left: '50%', top: '50%' }} />
+                            <div className="virus-particle" style={{ left: '45%', top: '45%', animationDelay: '0.5s' }} />
+                            <div className="virus-particle" style={{ left: '55%', top: '55%', animationDelay: '1s' }} />
+                            <div className="protected-particle" style={{ left: '30%', top: '40%' }} />
+                            <div className="protected-particle" style={{ left: '70%', top: '60%', animationDelay: '1s' }} />
+                          </>
+                        )}
+                        
+                        <div style={{ 
+                          position: 'absolute', 
+                          bottom: '20px', 
+                          left: '50%', 
+                          transform: 'translateX(-50%)',
+                          fontSize: '14px',
+                          color: '#888'
+                        }}>
+                          Just like contact tracing, but for fraud
+                        </div>
+                      </div>
+                    </Box>
+                  </BlockStack>
+                </Box>
+                
+                {/* CONCEPT 5: Stock Market Ticker Style */}
+                <Box background="bg-surface-subdued" padding="400" borderRadius="200">
+                  <BlockStack gap="300">
+                    <InlineStack gap="200" blockAlign="center" align="space-between">
+                      <Text variant="headingSm" as="h3">Fraud Market Exchange</Text>
+                      <Badge tone="success">TRADING</Badge>
+                    </InlineStack>
+                    
+                    <Box>
+                      <div style={{ 
+                        background: '#0a0a0a', 
+                        borderRadius: '8px', 
+                        padding: '20px',
+                        fontFamily: 'monospace',
+                        color: '#00ff00'
+                      }}>
+                        {/* Ticker tape */}
+                        <div style={{ 
+                          overflow: 'hidden', 
+                          whiteSpace: 'nowrap',
+                          borderBottom: '2px solid #00ff00',
+                          paddingBottom: '10px',
+                          marginBottom: '20px'
+                        }}>
+                          <div style={{ 
+                            display: 'inline-block',
+                            animation: 'scroll 20s linear infinite'
+                          }}>
+                            <style>{`
+                              @keyframes scroll {
+                                0% { transform: translateX(100%); }
+                                100% { transform: translateX(-100%); }
+                              }
+                            `}</style>
+                            FRAUD_MIAMI ↓ $8,400 (-85%) • FRAUD_NYC ↓ $12,300 (-92%) • FRAUD_LA ↓ $6,700 (-78%) • NETWORK_SHIELD ↑ +73% • PROTECTED_STORES ↑ {networkSize} (+15%)
+                          </div>
+                        </div>
+                        
+                        {/* Big numbers display */}
+                        <div style={{ textAlign: 'center' }}>
+                          <div style={{ fontSize: '48px', fontWeight: 'bold', color: networkAlerts.length > 0 ? '#ff0000' : '#00ff00' }}>
+                            {networkAlerts.length > 0 ? '📉' : '📈'} ${networkAlerts.length > 0 ? '-8,400' : '+125,000'}
+                          </div>
+                          <div style={{ fontSize: '18px', marginTop: '10px' }}>
+                            {networkAlerts.length > 0 ? 'FRAUD DETECTED' : 'FRAUD PREVENTED'}
+                          </div>
+                        </div>
+                        
+                        {/* Trading data */}
+                        <div style={{ 
+                          display: 'grid', 
+                          gridTemplateColumns: '1fr 1fr 1fr',
+                          gap: '20px',
+                          marginTop: '30px',
+                          fontSize: '14px'
+                        }}>
+                          <div>
+                            <div style={{ color: '#888' }}>VOLUME</div>
+                            <div style={{ color: '#fff', fontSize: '20px' }}>17.4K</div>
+                          </div>
+                          <div>
+                            <div style={{ color: '#888' }}>BLOCKED</div>
+                            <div style={{ color: '#00ff00', fontSize: '20px' }}>843</div>
+                          </div>
+                          <div>
+                            <div style={{ color: '#888' }}>SAVED</div>
+                            <div style={{ color: '#00ff00', fontSize: '20px' }}>$125K</div>
+                          </div>
+                        </div>
+                      </div>
+                    </Box>
                   </BlockStack>
                 </Box>
                 
@@ -1097,6 +1623,140 @@ export default function Dashboard() {
                       <BlockStack gap="100">
                         <Text variant="bodySm" tone="subdued">Active Alerts</Text>
                         <Text variant="headingMd" fontWeight="bold">3 now</Text>
+                      </BlockStack>
+                    </InlineGrid>
+                  </BlockStack>
+                </Box>
+              </BlockStack>
+            </Box>
+          </Card>
+
+          {/* Network Economics & Trust Metrics */}
+          <Card>
+            <Box padding="600">
+              <BlockStack gap="400">
+                <InlineStack gap="200" blockAlign="center">
+                  <Icon source={TeamIcon} tone="interactive" />
+                  <Text variant="headingLg" as="h2">Network Economics</Text>
+                  <Badge tone="magic">Real-time</Badge>
+                </InlineStack>
+                
+                {/* Signal Flow Visualization */}
+                <Box background="bg-surface-subdued" padding="400" borderRadius="200">
+                  <BlockStack gap="300">
+                    <Text variant="headingSm">Signal Flow Economics</Text>
+                    
+                    <Box>
+                      <svg width="100%" height="200" viewBox="0 0 800 200" style={{ background: '#0a0f1b', borderRadius: '8px' }}>
+                        <defs>
+                          <linearGradient id="signalGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" stopColor="#00ff88" stopOpacity="0.2"/>
+                            <stop offset="50%" stopColor="#00ff88" stopOpacity="0.8"/>
+                            <stop offset="100%" stopColor="#00ff88" stopOpacity="0.2"/>
+                          </linearGradient>
+                        </defs>
+                        
+                        {/* Signal type bars with animation */}
+                        <g>
+                          {/* PROBE signals */}
+                          <rect x="50" y="30" width="120" height="20" fill="#00aaff" opacity="0.8"/>
+                          <text x="60" y="45" fill="white" fontSize="12">PROBE: 892/min</text>
+                          <rect x="50" y="30" width="120" height="20" fill="url(#signalGradient)">
+                            <animate attributeName="x" values="50;650;50" dur="3s" repeatCount="indefinite"/>
+                          </rect>
+                          
+                          {/* TRUST signals */}
+                          <rect x="50" y="60" width="80" height="20" fill="#00ff88" opacity="0.8"/>
+                          <text x="60" y="75" fill="white" fontSize="12">TRUST: 421/min</text>
+                          <rect x="50" y="60" width="80" height="20" fill="url(#signalGradient)">
+                            <animate attributeName="x" values="50;650;50" dur="4s" repeatCount="indefinite"/>
+                          </rect>
+                          
+                          {/* BLOCK signals */}
+                          <rect x="50" y="90" width="60" height="20" fill="#ff4444" opacity="0.8"/>
+                          <text x="60" y="105" fill="white" fontSize="12">BLOCK: 147/min</text>
+                          <rect x="50" y="90" width="60" height="20" fill="url(#signalGradient)">
+                            <animate attributeName="x" values="50;650;50" dur="5s" repeatCount="indefinite"/>
+                          </rect>
+                          
+                          {/* FLAG signals */}
+                          <rect x="50" y="120" width="40" height="20" fill="#ffaa00" opacity="0.8"/>
+                          <text x="60" y="135" fill="white" fontSize="12">FLAG: 83/min</text>
+                          <rect x="50" y="120" width="40" height="20" fill="url(#signalGradient)">
+                            <animate attributeName="x" values="50;650;50" dur="6s" repeatCount="indefinite"/>
+                          </rect>
+                        </g>
+                        
+                        {/* Network value indicator */}
+                        <text x="400" y="180" fill="#00ff88" fontSize="14" textAnchor="middle" fontWeight="bold">
+                          Network Trust Score: 94.7% | Response Time: 43ms avg
+                        </text>
+                      </svg>
+                    </Box>
+                  </BlockStack>
+                </Box>
+                
+                {/* Trust Derived Metrics */}
+                <InlineGrid columns={2} gap="400">
+                  <Box background="bg-surface-secondary" padding="400" borderRadius="200">
+                    <BlockStack gap="300">
+                      <Text variant="headingSm">Trust Actions Today</Text>
+                      <Text variant="heading2xl" fontWeight="bold">48,247</Text>
+                      <BlockStack gap="100">
+                        <InlineStack gap="200" align="space-between">
+                          <Text variant="bodySm">Whitelist actions</Text>
+                          <Text variant="bodySm" fontWeight="semibold">12,841</Text>
+                        </InlineStack>
+                        <InlineStack gap="200" align="space-between">
+                          <Text variant="bodySm">Trust verifications</Text>
+                          <Text variant="bodySm" fontWeight="semibold">28,392</Text>
+                        </InlineStack>
+                        <InlineStack gap="200" align="space-between">
+                          <Text variant="bodySm">Risk downgrades</Text>
+                          <Text variant="bodySm" fontWeight="semibold">7,014</Text>
+                        </InlineStack>
+                      </BlockStack>
+                    </BlockStack>
+                  </Box>
+                  
+                  <Box background="bg-surface-secondary" padding="400" borderRadius="200">
+                    <BlockStack gap="300">
+                      <Text variant="headingSm">Network Value Created</Text>
+                      <Text variant="heading2xl" fontWeight="bold">$1.3M</Text>
+                      <BlockStack gap="100">
+                        <InlineStack gap="200" align="space-between">
+                          <Text variant="bodySm">Fraud prevented</Text>
+                          <Text variant="bodySm" fontWeight="semibold">$847K</Text>
+                        </InlineStack>
+                        <InlineStack gap="200" align="space-between">
+                          <Text variant="bodySm">False positives avoided</Text>
+                          <Text variant="bodySm" fontWeight="semibold">$312K</Text>
+                        </InlineStack>
+                        <InlineStack gap="200" align="space-between">
+                          <Text variant="bodySm">Time saved (hours)</Text>
+                          <Text variant="bodySm" fontWeight="semibold">2,847</Text>
+                        </InlineStack>
+                      </BlockStack>
+                    </BlockStack>
+                  </Box>
+                </InlineGrid>
+                
+                {/* Merchant Behavior Insights */}
+                <Box background="bg-surface-secondary" padding="400" borderRadius="200">
+                  <BlockStack gap="300">
+                    <Text variant="headingSm">How Merchants Use the Network</Text>
+                    <InlineGrid columns={3} gap="300">
+                      <BlockStack gap="100">
+                        <Text variant="headingMd" fontWeight="semibold">67%</Text>
+                        <Text variant="bodySm">Check every new customer</Text>
+                      </BlockStack>
+                      <BlockStack gap="100">
+                        <Text variant="headingMd" fontWeight="semibold">89%</Text>
+                        <Text variant="bodySm">Trust network decisions</Text>
+                      </BlockStack>
+                      <BlockStack gap="100">
+                        <Text variant="headingMd" fontWeight="semibold">4.2x</Text>
+                        <Text variant="bodySm">More likely to whitelist</Text>
                       </BlockStack>
                     </InlineGrid>
                   </BlockStack>
