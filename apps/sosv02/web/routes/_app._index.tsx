@@ -175,6 +175,10 @@ export default function Dashboard() {
   const [networkAlerts, setNetworkAlerts] = useState([]);
   const [showNetworkEffect, setShowNetworkEffect] = useState(false);
   const [liveNetworkActivity, setLiveNetworkActivity] = useState([]);
+  
+  // ROI Calculator states
+  const [monthlyRevenue, setMonthlyRevenue] = useState('50000');
+  const [roiCalculated, setRoiCalculated] = useState(false);
 
   // Demo data
   const salesData = "$12,450";
@@ -332,6 +336,11 @@ export default function Dashboard() {
   const simulateNetworkEffect = useCallback(() => {
     if (!isHydrated || !isMounted) return;
     
+    // Play alert sound
+    const alertSound = new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBCuBzvLY');
+    alertSound.volume = 0.3;
+    alertSound.play().catch(() => {}); // Ignore if audio blocked
+    
     // Simulate fraud detection on Store A
     const newAlert = {
       id: Date.now(),
@@ -347,6 +356,11 @@ export default function Dashboard() {
     
     // Simulate network propagation after 2 seconds
     setTimeout(() => {
+      // Play success sound
+      const successSound = new Audio('data:audio/wav;base64,UklGRl4GAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YToGAACBhYmEbF5fdJyxrIVhNzVgqNvcoWEbBkCY3OTLeSsFLYLA79mTQgkZaLvw56RQEgxPqOXrt2wiBDuS0+zTgjMGHnjB7tueUgoWZbXr6KFSFQ');
+      successSound.volume = 0.3;
+      successSound.play().catch(() => {});
+      
       const networkActivity = [
         { store: 'Fashion Boutique NYC', action: 'Blocked same card', time: '2 sec ago' },
         { store: 'Sports Gear Express', action: 'Flagged for review', time: '3 sec ago' },
@@ -819,6 +833,111 @@ export default function Dashboard() {
                     </BlockStack>
                   </InlineGrid>
                 </Box>
+              </BlockStack>
+            </Box>
+          </Card>
+
+          {/* ROI Calculator */}
+          <Card>
+            <Box padding="600">
+              <BlockStack gap="400">
+                <InlineStack gap="200" blockAlign="center">
+                  <Icon source={CashDollarIcon} tone="success" />
+                  <Text variant="headingLg" as="h2">ROI Calculator</Text>
+                  <Badge tone="success">Live Demo</Badge>
+                </InlineStack>
+                
+                <BlockStack gap="300">
+                  <TextField
+                    label="Your monthly revenue"
+                    type="number"
+                    value={monthlyRevenue}
+                    onChange={(value) => {
+                      setMonthlyRevenue(value);
+                      setRoiCalculated(false);
+                    }}
+                    prefix="$"
+                    autoComplete="off"
+                  />
+                  
+                  <Button 
+                    variant="primary" 
+                    fullWidth
+                    onClick={() => setRoiCalculated(true)}
+                    disabled={!isHydrated || !isMounted}
+                  >
+                    Calculate My Savings
+                  </Button>
+                  
+                  {roiCalculated && monthlyRevenue && (
+                    <Box background="bg-surface-success" padding="400" borderRadius="200">
+                      <BlockStack gap="200">
+                        <Text variant="headingSm" as="h3">Your Projected Savings with SOS:</Text>
+                        <InlineGrid columns={{xs: 1, sm: 3}} gap="400">
+                          <BlockStack gap="100">
+                            <Text variant="bodySm" tone="subdued">Monthly Savings</Text>
+                            <Text variant="headingMd" fontWeight="bold" tone="success">
+                              ${(parseFloat(monthlyRevenue) * 0.025).toLocaleString()}
+                            </Text>
+                          </BlockStack>
+                          <BlockStack gap="100">
+                            <Text variant="bodySm" tone="subdued">Annual Savings</Text>
+                            <Text variant="headingMd" fontWeight="bold" tone="success">
+                              ${(parseFloat(monthlyRevenue) * 0.025 * 12).toLocaleString()}
+                            </Text>
+                          </BlockStack>
+                          <BlockStack gap="100">
+                            <Text variant="bodySm" tone="subdued">ROI</Text>
+                            <Text variant="headingMd" fontWeight="bold" tone="success">
+                              {((parseFloat(monthlyRevenue) * 0.025 * 12 - 1188) / 1188 * 100).toFixed(0)}%
+                            </Text>
+                          </BlockStack>
+                        </InlineGrid>
+                        <Text variant="bodySm" tone="subdued">
+                          Based on industry average 2.5% fraud reduction • $99/month investment
+                        </Text>
+                      </BlockStack>
+                    </Box>
+                  )}
+                </BlockStack>
+              </BlockStack>
+            </Box>
+          </Card>
+
+          {/* Merchant Testimonials */}
+          <Card>
+            <Box padding="600">
+              <BlockStack gap="400">
+                <InlineStack gap="200" blockAlign="center">
+                  <Icon source={TeamIcon} tone="base" />
+                  <Text variant="headingLg" as="h2">What Merchants Say</Text>
+                </InlineStack>
+                
+                <InlineGrid columns={{xs: 1, sm: 3}} gap="400">
+                  <Box background="bg-surface-subdued" padding="400" borderRadius="200">
+                    <BlockStack gap="200">
+                      <Text variant="bodySm" tone="subdued">"SOS caught 12 fraudulent orders in our first week. That's $8,400 saved!"</Text>
+                      <Text variant="bodySm" fontWeight="semibold">- TechGear Pro</Text>
+                      <Text variant="bodySm" tone="subdued">⭐⭐⭐⭐⭐</Text>
+                    </BlockStack>
+                  </Box>
+                  
+                  <Box background="bg-surface-subdued" padding="400" borderRadius="200">
+                    <BlockStack gap="200">
+                      <Text variant="bodySm" tone="subdued">"The network alerts are incredible. We blocked 3 scammers other stores flagged."</Text>
+                      <Text variant="bodySm" fontWeight="semibold">- Fashion Forward NYC</Text>
+                      <Text variant="bodySm" tone="subdued">⭐⭐⭐⭐⭐</Text>
+                    </BlockStack>
+                  </Box>
+                  
+                  <Box background="bg-surface-subdued" padding="400" borderRadius="200">
+                    <BlockStack gap="200">
+                      <Text variant="bodySm" tone="subdued">"73% reduction in chargebacks. SOS pays for itself 10x over."</Text>
+                      <Text variant="bodySm" fontWeight="semibold">- Beauty Haven</Text>
+                      <Text variant="bodySm" tone="subdued">⭐⭐⭐⭐⭐</Text>
+                    </BlockStack>
+                  </Box>
+                </InlineGrid>
               </BlockStack>
             </Box>
           </Card>

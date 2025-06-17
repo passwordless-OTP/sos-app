@@ -47,7 +47,10 @@ export const loader = async ({ context }: LoaderFunctionArgs) => {
   });
 };
 
-export const Layout = ({ children }: { children: React.ReactNode; }) => {
+export default function App() {
+  const { gadgetConfig } = useLoaderData<typeof loader>();
+  const location = useLocation();
+
   return (
     <html lang="en">
       <head>
@@ -57,31 +60,22 @@ export const Layout = ({ children }: { children: React.ReactNode; }) => {
       </head>
       <body>
         <Suspense fallback={<FullPageSpinner />}>
-          {children}
+          <GadgetProvider
+            type={AppType.Embedded}
+            shopifyApiKey={gadgetConfig.apiKeys.shopify ?? ""}
+            api={api}
+            location={location}
+            shopifyInstallState={gadgetConfig.shopifyInstallState}
+          >
+            <AppProvider i18n={enTranslations} linkComponent={AdaptorLink}>
+              <Outlet />
+            </AppProvider>
+          </GadgetProvider>
         </Suspense>
         <ScrollRestoration />
         <Scripts />
       </body>
     </html>
-  );
-};
-
-export default function App() {
-  const { gadgetConfig } = useLoaderData<typeof loader>();
-  const location = useLocation();
-
-  return (
-    <GadgetProvider
-      type={AppType.Embedded}
-      shopifyApiKey={gadgetConfig.apiKeys.shopify ?? ""}
-      api={api}
-      location={location}
-      shopifyInstallState={gadgetConfig.shopifyInstallState}
-    >
-      <AppProvider i18n={enTranslations} linkComponent={AdaptorLink}>
-        <Outlet />
-      </AppProvider>
-    </GadgetProvider>
   );
 }
 
