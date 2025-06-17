@@ -868,6 +868,164 @@ export default function Dashboard() {
                   </BlockStack>
                 </Box>
                 
+                {/* CONCEPT 2: Radar/Sonar Visualization */}
+                <Box background="bg-surface-subdued" padding="400" borderRadius="200">
+                  <BlockStack gap="300">
+                    <InlineStack gap="200" blockAlign="center" align="space-between">
+                      <Text variant="headingSm" as="h3">Fraud Detection Radar</Text>
+                      <Badge tone="warning">Scanning</Badge>
+                    </InlineStack>
+                    
+                    <Box>
+                      <svg width="100%" height="250" viewBox="0 0 400 250" style={{ background: '#0a0a0a', borderRadius: '8px' }}>
+                        {/* Radar circles */}
+                        <circle cx="200" cy="125" r="40" fill="none" stroke="#0f4c0f" strokeWidth="1" opacity="0.5"/>
+                        <circle cx="200" cy="125" r="80" fill="none" stroke="#0f4c0f" strokeWidth="1" opacity="0.4"/>
+                        <circle cx="200" cy="125" r="120" fill="none" stroke="#0f4c0f" strokeWidth="1" opacity="0.3"/>
+                        
+                        {/* Radar sweep line */}
+                        <line x1="200" y1="125" x2="200" y2="25" stroke="#00ff00" strokeWidth="2" opacity="0.8">
+                          <animateTransform
+                            attributeName="transform"
+                            attributeType="XML"
+                            type="rotate"
+                            from="0 200 125"
+                            to="360 200 125"
+                            dur="4s"
+                            repeatCount="indefinite"/>
+                        </line>
+                        
+                        {/* Radar sweep gradient */}
+                        <defs>
+                          <radialGradient id="sweepGradient">
+                            <stop offset="0%" stopColor="#00ff00" stopOpacity="0.6"/>
+                            <stop offset="100%" stopColor="#00ff00" stopOpacity="0"/>
+                          </radialGradient>
+                        </defs>
+                        
+                        <path d="M 200,125 L 200,25 A 100,100 0 0,1 280,90 z" fill="url(#sweepGradient)" opacity="0.4">
+                          <animateTransform
+                            attributeName="transform"
+                            attributeType="XML"
+                            type="rotate"
+                            from="0 200 125"
+                            to="360 200 125"
+                            dur="4s"
+                            repeatCount="indefinite"/>
+                        </path>
+                        
+                        {/* Threat blips */}
+                        {networkAlerts.length > 0 ? (
+                          <>
+                            <circle cx="150" cy="100" r="5" fill="#ff0000">
+                              <animate attributeName="opacity" values="1;0;1" dur="1s" repeatCount="indefinite"/>
+                            </circle>
+                            <text x="150" y="90" fill="#ff0000" fontSize="10" textAnchor="middle">THREAT</text>
+                            
+                            <circle cx="250" cy="150" r="3" fill="#ffaa00">
+                              <animate attributeName="opacity" values="1;0;1" dur="1.5s" repeatCount="indefinite"/>
+                            </circle>
+                            <text x="250" y="165" fill="#ffaa00" fontSize="8" textAnchor="middle">SUSPICIOUS</text>
+                          </>
+                        ) : (
+                          <text x="200" y="125" fill="#00ff00" fontSize="12" textAnchor="middle">SCANNING...</text>
+                        )}
+                        
+                        {/* Center point */}
+                        <circle cx="200" cy="125" r="3" fill="#00ff00"/>
+                        <text x="200" y="240" fill="#00ff00" fontSize="10" textAnchor="middle">
+                          Network Security Radar - {networkSize} Stores Protected
+                        </text>
+                      </svg>
+                    </Box>
+                  </BlockStack>
+                </Box>
+                
+                {/* CONCEPT 3: Shield Network Visualization */}
+                <Box background="bg-surface-subdued" padding="400" borderRadius="200">
+                  <BlockStack gap="300">
+                    <InlineStack gap="200" blockAlign="center" align="space-between">
+                      <Text variant="headingSm" as="h3">Store Protection Shield Network</Text>
+                      <Badge tone="success">Active</Badge>
+                    </InlineStack>
+                    
+                    <Box>
+                      <svg width="100%" height="250" viewBox="0 0 600 250" style={{ background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)', borderRadius: '8px' }}>
+                        {/* Animated background grid */}
+                        <defs>
+                          <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+                            <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#0f3460" strokeWidth="0.5" opacity="0.3"/>
+                          </pattern>
+                        </defs>
+                        <rect width="100%" height="100%" fill="url(#grid)"/>
+                        
+                        {/* Central shield */}
+                        <g transform="translate(300, 125)">
+                          <path d="M 0,-40 L -30,-20 L -30,20 L 0,40 L 30,20 L 30,-20 Z" 
+                                fill="#e94560" 
+                                stroke="#f47068" 
+                                strokeWidth="2">
+                            <animate attributeName="opacity" values="0.8;1;0.8" dur="2s" repeatCount="indefinite"/>
+                          </path>
+                          <text x="0" y="5" fill="white" fontSize="20" textAnchor="middle" fontWeight="bold">SOS</text>
+                        </g>
+                        
+                        {/* Connected store shields */}
+                        <g>
+                          {/* Store 1 */}
+                          <circle cx="150" cy="80" r="25" fill="none" stroke="#16a34a" strokeWidth="2" opacity="0.8"/>
+                          <circle cx="150" cy="80" r="20" fill="#16a34a" opacity="0.3"/>
+                          <line x1="150" y1="80" x2="270" y2="105" stroke="#16a34a" strokeWidth="1" opacity="0.5">
+                            <animate attributeName="stroke-dasharray" values="0,100;100,0" dur="2s" repeatCount="indefinite"/>
+                          </line>
+                          <text x="150" y="85" fill="white" fontSize="10" textAnchor="middle">STORE</text>
+                          
+                          {/* Store 2 */}
+                          <circle cx="450" cy="80" r="25" fill="none" stroke="#16a34a" strokeWidth="2" opacity="0.8"/>
+                          <circle cx="450" cy="80" r="20" fill="#16a34a" opacity="0.3"/>
+                          <line x1="450" y1="80" x2="330" y2="105" stroke="#16a34a" strokeWidth="1" opacity="0.5">
+                            <animate attributeName="stroke-dasharray" values="0,100;100,0" dur="2s" begin="0.5s" repeatCount="indefinite"/>
+                          </line>
+                          <text x="450" y="85" fill="white" fontSize="10" textAnchor="middle">STORE</text>
+                          
+                          {/* Store 3 */}
+                          <circle cx="150" cy="170" r="25" fill="none" stroke="#16a34a" strokeWidth="2" opacity="0.8"/>
+                          <circle cx="150" cy="170" r="20" fill="#16a34a" opacity="0.3"/>
+                          <line x1="150" y1="170" x2="270" y2="145" stroke="#16a34a" strokeWidth="1" opacity="0.5">
+                            <animate attributeName="stroke-dasharray" values="0,100;100,0" dur="2s" begin="1s" repeatCount="indefinite"/>
+                          </line>
+                          <text x="150" y="175" fill="white" fontSize="10" textAnchor="middle">STORE</text>
+                          
+                          {/* Store 4 */}
+                          <circle cx="450" cy="170" r="25" fill="none" stroke="#16a34a" strokeWidth="2" opacity="0.8"/>
+                          <circle cx="450" cy="170" r="20" fill="#16a34a" opacity="0.3"/>
+                          <line x1="450" y1="170" x2="330" y2="145" stroke="#16a34a" strokeWidth="1" opacity="0.5">
+                            <animate attributeName="stroke-dasharray" values="0,100;100,0" dur="2s" begin="1.5s" repeatCount="indefinite"/>
+                          </line>
+                          <text x="450" y="175" fill="white" fontSize="10" textAnchor="middle">STORE</text>
+                        </g>
+                        
+                        {/* Threat indicators */}
+                        {networkAlerts.length > 0 && (
+                          <>
+                            <circle cx="150" cy="80" r="30" fill="none" stroke="#ff0000" strokeWidth="3" opacity="0">
+                              <animate attributeName="r" values="25;35;25" dur="1s" repeatCount="indefinite"/>
+                              <animate attributeName="opacity" values="0;0.8;0" dur="1s" repeatCount="indefinite"/>
+                            </circle>
+                            <text x="300" y="200" fill="#ff0000" fontSize="12" textAnchor="middle" fontWeight="bold">
+                              THREAT BLOCKED BY NETWORK SHIELD
+                            </text>
+                          </>
+                        )}
+                        
+                        <text x="300" y="230" fill="#16a34a" fontSize="11" textAnchor="middle">
+                          {networkSize} Stores Connected • Real-time Protection • Stronger Together
+                        </text>
+                      </svg>
+                    </Box>
+                  </BlockStack>
+                </Box>
+                
                 {networkAlerts.length > 0 && (
                   <Banner tone="critical" title="Active Network Alert">
                     <BlockStack gap="200">
