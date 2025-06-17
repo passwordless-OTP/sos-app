@@ -783,6 +783,91 @@ export default function Dashboard() {
                   </Button>
                 </InlineStack>
                 
+                {/* Waze-like Map Visualization */}
+                <Box background="bg-surface-subdued" padding="400" borderRadius="200">
+                  <BlockStack gap="300">
+                    <InlineStack gap="200" blockAlign="center" align="space-between">
+                      <Text variant="headingSm" as="h3">Live Fraud Map - "Waze for E-commerce"</Text>
+                      <Badge tone="success">Real-time</Badge>
+                    </InlineStack>
+                    
+                    {/* Simple SVG Map */}
+                    <Box>
+                      <svg width="100%" height="200" viewBox="0 0 600 200" style={{ background: '#f0f0f0', borderRadius: '8px' }}>
+                        {/* US Map simplified outline */}
+                        <path d="M 50 100 L 150 80 L 250 90 L 350 85 L 450 95 L 550 100 L 550 150 L 450 160 L 350 155 L 250 160 L 150 150 L 50 140 Z" 
+                              fill="#e0e0e0" stroke="#999" strokeWidth="1"/>
+                        
+                        {/* City dots */}
+                        <circle cx="150" cy="100" r="4" fill="#666">
+                          <title>Miami</title>
+                        </circle>
+                        <circle cx="350" cy="90" r="4" fill="#666">
+                          <title>NYC</title>
+                        </circle>
+                        <circle cx="450" cy="95" r="4" fill="#666">
+                          <title>LA</title>
+                        </circle>
+                        
+                        {/* Animated fraud detection */}
+                        {networkAlerts.length > 0 && (
+                          <>
+                            {/* Pulsing red circle at fraud location */}
+                            <circle cx="150" cy="100" r="8" fill="none" stroke="#dc2626" strokeWidth="2">
+                              <animate attributeName="r" values="8;20;8" dur="2s" repeatCount="indefinite"/>
+                              <animate attributeName="opacity" values="1;0;1" dur="2s" repeatCount="indefinite"/>
+                            </circle>
+                            
+                            {/* Protection spreading to other stores */}
+                            <circle cx="350" cy="90" r="8" fill="none" stroke="#16a34a" strokeWidth="2" opacity="0">
+                              <animate attributeName="opacity" values="0;1;1" begin="1s" dur="1s" fill="freeze"/>
+                              <animate attributeName="r" values="8;15;8" begin="1s" dur="1s" repeatCount="3"/>
+                            </circle>
+                            
+                            <circle cx="450" cy="95" r="8" fill="none" stroke="#16a34a" strokeWidth="2" opacity="0">
+                              <animate attributeName="opacity" values="0;1;1" begin="1.5s" dur="1s" fill="freeze"/>
+                              <animate attributeName="r" values="8;15;8" begin="1.5s" dur="1s" repeatCount="3"/>
+                            </circle>
+                          </>
+                        )}
+                        
+                        {/* Labels */}
+                        <text x="150" y="120" textAnchor="middle" fontSize="10" fill="#666">Miami</text>
+                        <text x="350" y="110" textAnchor="middle" fontSize="10" fill="#666">NYC</text>
+                        <text x="450" y="115" textAnchor="middle" fontSize="10" fill="#666">LA</text>
+                        
+                        {/* Legend */}
+                        <circle cx="20" cy="20" r="4" fill="#dc2626"/>
+                        <text x="30" y="24" fontSize="10" fill="#666">Fraud Detected</text>
+                        
+                        <circle cx="20" cy="35" r="4" fill="#16a34a"/>
+                        <text x="30" y="39" fontSize="10" fill="#666">Store Protected</text>
+                      </svg>
+                    </Box>
+                    
+                    {/* Waze-like status text */}
+                    {networkAlerts.length > 0 ? (
+                      <Box background="bg-surface-critical" padding="200" borderRadius="100">
+                        <InlineStack gap="200" blockAlign="center">
+                          <Icon source={AlertCircleIcon} tone="critical" />
+                          <Text variant="bodySm" fontWeight="semibold">
+                            Fraud route detected: Miami → NYC → LA. Network protecting stores...
+                          </Text>
+                        </InlineStack>
+                      </Box>
+                    ) : (
+                      <Box background="bg-surface-success" padding="200" borderRadius="100">
+                        <InlineStack gap="200" blockAlign="center">
+                          <Icon source={CashDollarIcon} tone="success" />
+                          <Text variant="bodySm">
+                            All routes clear. Network monitoring 17,453 stores.
+                          </Text>
+                        </InlineStack>
+                      </Box>
+                    )}
+                  </BlockStack>
+                </Box>
+                
                 {networkAlerts.length > 0 && (
                   <Banner tone="critical" title="Active Network Alert">
                     <BlockStack gap="200">
@@ -814,24 +899,49 @@ export default function Dashboard() {
                 )}
                 
                 <Box background="bg-surface-subdued" padding="400" borderRadius="200">
-                  <InlineGrid columns={{xs: 2, sm: 4}} gap="400">
-                    <BlockStack gap="100">
-                      <Text variant="bodySm" tone="subdued">Network Size</Text>
-                      <Text variant="headingMd" fontWeight="bold">{networkSize} stores</Text>
-                    </BlockStack>
-                    <BlockStack gap="100">
-                      <Text variant="bodySm" tone="subdued">Frauds Prevented</Text>
-                      <Text variant="headingMd" fontWeight="bold">843 this month</Text>
-                    </BlockStack>
-                    <BlockStack gap="100">
-                      <Text variant="bodySm" tone="subdued">Amount Saved</Text>
-                      <Text variant="headingMd" fontWeight="bold">$125,000</Text>
-                    </BlockStack>
-                    <BlockStack gap="100">
-                      <Text variant="bodySm" tone="subdued">Active Alerts</Text>
-                      <Text variant="headingMd" fontWeight="bold">3 now</Text>
-                    </BlockStack>
-                  </InlineGrid>
+                  <BlockStack gap="300">
+                    {/* Network Strength Meter - Like Waze */}
+                    <Box>
+                      <InlineStack gap="200" blockAlign="center" align="space-between">
+                        <Text variant="headingSm" as="h4">Network Protection Strength</Text>
+                        <Badge tone="success">87% Coverage</Badge>
+                      </InlineStack>
+                      <Box paddingBlockStart="200">
+                        <div style={{ width: '100%', height: '8px', backgroundColor: '#e5e5e5', borderRadius: '4px', overflow: 'hidden' }}>
+                          <div style={{ 
+                            width: '87%', 
+                            height: '100%', 
+                            background: 'linear-gradient(to right, #16a34a, #22c55e)', 
+                            transition: 'width 0.5s ease'
+                          }} />
+                        </div>
+                      </Box>
+                      <Text variant="bodySm" tone="subdued">
+                        Like Waze, our fraud detection gets stronger with every new merchant
+                      </Text>
+                    </Box>
+                    
+                    <Divider />
+                    
+                    <InlineGrid columns={{xs: 2, sm: 4}} gap="400">
+                      <BlockStack gap="100">
+                        <Text variant="bodySm" tone="subdued">Network Size</Text>
+                        <Text variant="headingMd" fontWeight="bold">{networkSize} stores</Text>
+                      </BlockStack>
+                      <BlockStack gap="100">
+                        <Text variant="bodySm" tone="subdued">Frauds Prevented</Text>
+                        <Text variant="headingMd" fontWeight="bold">843 this month</Text>
+                      </BlockStack>
+                      <BlockStack gap="100">
+                        <Text variant="bodySm" tone="subdued">Amount Saved</Text>
+                        <Text variant="headingMd" fontWeight="bold">$125,000</Text>
+                      </BlockStack>
+                      <BlockStack gap="100">
+                        <Text variant="bodySm" tone="subdued">Active Alerts</Text>
+                        <Text variant="headingMd" fontWeight="bold">3 now</Text>
+                      </BlockStack>
+                    </InlineGrid>
+                  </BlockStack>
                 </Box>
               </BlockStack>
             </Box>

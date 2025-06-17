@@ -1,0 +1,150 @@
+SOS Dashboard. This page is ready
+
+SOS Dashboard
+
+AI-Powered Store Intelligence & Fraud Prevention
+
+Export
+Notifications
+View Settings
+Setup Progress
+
+75% Complete
+
+75%
+
+Complete your store setup to unlock all features
+
+Welcome to SOS - Store Operations Shield
+
+Ask me anything about your store or check orders for fraud. Connected to 17,453 stores for real-time threat intelligence.
+
+Today's Sales
+
+$12,450
+
++15% from yesterday
+
+Orders Today
+
+23
+
+3 pending review
+
+Network Risk
+
+Low
+
+Community protected
+
+Network Size
+
+17,453
+
+Protected stores
+
+Sales Trend
+Success
++15%
+Last 7 Days
+
+Mon
+
+Today
+
+AI Store Assistant
+Info
+Beta
+
+Quick questions:
+
+What were my sales today?
+Show me high-risk orders
+What's my best selling product?
+Any fraud attempts today?
+Inventory running low?
+Ask anything about your store
+Ask AI
+Try questions about sales, orders, inventory, customers, or fraud detection
+Network Intelligence Live Feed
+Simulate Network Alert
+
+Network Size
+
+17,453 stores
+
+Frauds Prevented
+
+843 this month
+
+Amount Saved
+
+$125,000
+
+Active Alerts
+
+3 now
+
+ROI Calculator
+Success
+Live Demo
+Your monthly revenue
+$
+Calculate My Savings
+What Merchants Say
+
+"SOS caught 12 fraudulent orders in our first week. That's $8,400 saved!"
+
+- TechGear Pro
+
+⭐⭐⭐⭐⭐
+
+"The network alerts are incredible. We blocked 3 scammers other stores flagged."
+
+- Fashion Forward NYC
+
+⭐⭐⭐⭐⭐
+
+"73% reduction in chargebacks. SOS pays for itself 10x over."
+
+- Beauty Haven
+
+⭐⭐⭐⭐⭐
+
+Recent Fraud Checks
+Export
+View all
+Order	Email	IP Address	Status	Risk Score
+
+#1234
+	john@example.com	192.168.1.1	
+Success
+Safe
+	95
+
+#1235
+	suspicious@temp.com	45.67.89.10	
+Warning
+Review
+	45
+
+#1236
+	mary@gmail.com	98.76.54.32	
+Success
+Safe
+	92
+
+#1237
+	test@protonmail.com	178.45.22.11	
+Critical
+High Risk
+	15
+
+#1238
+	customer@outlook.com	92.168.1.45	
+Success
+Safe
+	88
+Safe (0-30)
+Review (31-70)
+High Risk (71-100)

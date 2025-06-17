@@ -1,0 +1,43 @@
+name: Automated QA
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  qa-tests:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+        
+    - name: Install dependencies
+      run: |
+        npm install playwright
+        npx playwright install chromium
+        
+    - name: Run QA Suite
+      run: |
+        cd test-framework
+        node automated-qa.js
+        
+    - name: Upload test results
+      if: always()
+      uses: actions/upload-artifact@v3
+      with:
+        name: qa-results
+        path: test-framework/results/
+        
+    - name: Upload screenshots
+      if: failure()
+      uses: actions/upload-artifact@v3
+      with:
+        name: failure-screenshots
+        path: test-framework/results/*.png

@@ -1,0 +1,125 @@
+name: Update Project Board
+
+on:
+  issues:
+    types: [opened, edited, closed, reopened, labeled, unlabeled]
+  pull_request:
+    types: [opened, edited, closed, reopened, ready_for_review, converted_to_draft]
+  schedule:
+    - cron: '0 9 * * *'  # Daily at 9 AM UTC
+  workflow_dispatch:  # Manual trigger
+
+jobs:
+  update-board:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: read
+      pull-requests: read
+      repository-projects: write
+      
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+      
+    - name: Update Project Board
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        echo "🔄 Updating SOS Development Roadmap..."
+        
+        # Project and field IDs
+        PROJECT_ID="PVT_kwHOB3B9VM4A7qjs"
+        FIELD_ID="PVTSSF_lAHOB3B9VM4A7qjszgv5Tas"
+        TODO_ID="f75ad846"
+        IN_PROGRESS_ID="47fc9ee4"
+        DONE_ID="98236657"
+        
+        # Function to update status
+        update_item_status() {
+          local item_id=$1
+          local status_id=$2
+          
+          gh api graphql -f query="
+          mutation {
+            updateProjectV2ItemFieldValue(
+              input: {
+                projectId: \"$PROJECT_ID\"
+                itemId: \"$item_id\"
+                fieldId: \"$FIELD_ID\"
+                value: {singleSelectOptionId: \"$status_id\"}
+              }
+            ) {
+              projectV2Item { id }
+            }
+          }"
+        }
+        
+        # Auto-label new issues
+        if [ "${{ github.event_name }}" = "issues" ] && [ "${{ github.event.action }}" = "opened" ]; then
+          ISSUE_NUMBER="${{ github.event.issue.number }}"
+          ISSUE_BODY="${{ github.event.issue.body }}"
+          
+          # Add enhancement label if it's a feature request
+          if echo "$ISSUE_BODY" | grep -qi "feature\|enhancement\|add\|implement"; then
+            gh issue edit $ISSUE_NUMBER --add-label "enhancement"
+          fi
+          
+          # Add bug label if it's a bug report
+          if echo "$ISSUE_BODY" | grep -qi "bug\|error\|broken\|fix"; then
+            gh issue edit $ISSUE_NUMBER --add-label "bug"
+          fi
+        fi
+        
+        # Update board based on issue/PR state
+        if [ "${{ github.event_name }}" = "issues" ] || [ "${{ github.event_name }}" = "pull_request" ]; then
+          # Get the item ID for this issue/PR in the project
+          NUMBER="${{ github.event.issue.number || github.event.pull_request.number }}"
+          
+          ITEM_ID=$(gh api graphql -f query="
+          query {
+            repository(owner: \"passwordless-OTP\", name: \"sos-app\") {
+              issue(number: $NUMBER) {
+                projectItems(first: 10) {
+                  nodes {
+                    id
+                    project {
+                      id
+                    }
+                  }
+                }
+              }
+            }
+          }" | jq -r ".data.repository.issue.projectItems.nodes[] | select(.project.id == \"$PROJECT_ID\") | .id")
+          
+          if [ -n "$ITEM_ID" ]; then
+            # Update status based on event
+            case "${{ github.event.action }}" in
+              "opened"|"reopened")
+                update_item_status "$ITEM_ID" "$TODO_ID"
+                ;;
+              "closed")
+                update_item_status "$ITEM_ID" "$DONE_ID"
+                ;;
+            esac
+          fi
+        fi
+        
+        echo "✅ Board update complete!"
+
+    - name: Post Summary Comment
+      if: github.event_name == 'issues' && github.event.action == 'opened'
+      uses: actions/github-script@v6
+      with:
+        script: |
+          const issue_number = context.issue.number;
+          const labels = context.payload.issue.labels.map(l => l.name);
+          
+          // Only post if no labels are present
+          if (labels.length === 0) {
+            github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issue_number,
+              body: `👋 Thanks for creating this issue!\n\n**Next steps:**\n- Please add appropriate labels (priority, effort, feature)\n- This issue has been added to the [SOS Development Roadmap](https://github.com/users/passwordless-OTP/projects/7)\n- A team member will review and prioritize this soon`
+            });
+          }
