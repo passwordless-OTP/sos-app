@@ -1,0 +1,150 @@
+/* Mobile-optimized styles for investor demo */
+
+/* iPad-specific optimizations */
+@media (min-width: 768px) and (max-width: 1024px) {
+  /* Larger touch targets for iPad */
+  .Polaris-Button {
+    min-height: 48px !important;
+    font-size: 16px !important;
+  }
+
+  /* Better spacing for iPad */
+  .Polaris-Page {
+    padding: 20px !important;
+  }
+
+  /* Larger text for readability */
+  .Polaris-Text--variant-heading3xl {
+    font-size: 72px !important;
+    line-height: 1.1 !important;
+  }
+
+  .Polaris-Text--variant-heading2xl {
+    font-size: 48px !important;
+  }
+
+  .Polaris-Text--variant-headingXl {
+    font-size: 36px !important;
+  }
+
+  /* Tab optimization for touch */
+  .Polaris-Tabs__Tab {
+    min-height: 56px !important;
+    padding: 16px 24px !important;
+  }
+
+  /* Card spacing */
+  .Polaris-Card {
+    margin-bottom: 20px;
+  }
+}
+
+/* Mobile-specific (iPhone) */
+@media (max-width: 767px) {
+  /* Full-width cards on mobile */
+  .Polaris-Layout__Section {
+    padding: 10px !important;
+  }
+
+  /* Larger touch targets */
+  .Polaris-Button {
+    min-height: 44px !important;
+  }
+
+  /* Responsive text */
+  .Polaris-Text--variant-heading3xl {
+    font-size: 48px !important;
+  }
+
+  .Polaris-Text--variant-heading2xl {
+    font-size: 32px !important;
+  }
+
+  /* Stack tabs vertically on very small screens */
+  @media (max-width: 400px) {
+    .Polaris-Tabs__Wrapper {
+      flex-direction: column;
+    }
+  }
+}
+
+/* Demo mode indicator */
+.demo-indicator {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 14px;
+}
+
+/* Smooth transitions */
+.metric-transition {
+  transition: all 0.3s ease-in-out;
+}
+
+/* Touch-friendly spacing */
+.touch-target {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Prevent text selection on tap */
+.no-select {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Swipe hint animation */
+@keyframes swipe-hint {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(10px); }
+}
+
+.swipe-hint {
+  animation: swipe-hint 2s ease-in-out infinite;
+}
+
+/* Loading states */
+.skeleton-shimmer {
+  background: linear-gradient(
+    90deg,
+    #f0f0f0 25%,
+    #e0e0e0 50%,
+    #f0f0f0 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* High contrast for projectors */
+.high-contrast {
+  filter: contrast(1.2);
+}
+
+/* Focus indicators for accessibility */
+.Polaris-Button:focus-visible {
+  outline: 3px solid #005BD3;
+  outline-offset: 2px;
+}
+
+/* Responsive grid for metrics */
+@media (max-width: 600px) {
+  .Polaris-InlineGrid {
+    grid-template-columns: 1fr !important;
+  }
+}

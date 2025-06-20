@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOS - Community Protection (Jony Ive Vision)</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background: #f5f5f5;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+            max-width: 900px;
+            width: 100%;
+        }
+        h1 {
+            font-size: 24px;
+            font-weight: 300;
+            margin: 0 0 8px 0;
+            color: #333;
+        }
+        .subtitle {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+        .viz-container {
+            background: #000;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .status {
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+            margin-top: 20px;
+        }
+        .controls {
+            text-align: center;
+            margin-top: 30px;
+        }
+        button {
+            background: #000;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+        button:hover {
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Community Protection</h1>
+        <p class="subtitle">A Jony Ive vision for SOS - "You're not alone"</p>
+        
+        <div class="viz-container">
+            <svg width="100%" height="400" viewBox="0 0 800 400" id="visualization">
+                <defs>
+                    <!-- Soft gradient for the protective halo -->
+                    <radialGradient id="protectiveHalo">
+                        <stop offset="0%" stop-color="#ffffff" stop-opacity="0.15"/>
+                        <stop offset="50%" stop-color="#ffffff" stop-opacity="0.05"/>
+                        <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+                    </radialGradient>
+                    
+                    <!-- Individual store light gradient -->
+                    <radialGradient id="storeLight">
+                        <stop offset="0%" stop-color="#ffffff" stop-opacity="1"/>
+                        <stop offset="50%" stop-color="#ffffff" stop-opacity="0.6"/>
+                        <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+                    </radialGradient>
+                    
+                    <!-- Threat gradient -->
+                    <radialGradient id="threatApproach">
+                        <stop offset="0%" stop-color="#ff6b6b" stop-opacity="0.3"/>
+                        <stop offset="100%" stop-color="#ff6b6b" stop-opacity="0"/>
+                    </radialGradient>
+                </defs>
+                
+                <!-- Your store - central breathing light -->
+                <circle cx="400" cy="200" r="8" fill="url(#storeLight)">
+                    <animate attributeName="r" values="8;12;8" dur="4s" repeatCount="indefinite"/>
+                    <animate attributeName="opacity" values="0.8;1;0.8" dur="4s" repeatCount="indefinite"/>
+                </circle>
+                
+                <!-- Surrounding stores - will be added by JavaScript -->
+                <g id="surroundingStores"></g>
+                
+                <!-- Threat response group -->
+                <g id="threatResponse" opacity="0">
+                    <!-- Threat approaching from outside -->
+                    <circle cx="600" cy="100" r="40" fill="url(#threatApproach)">
+                        <animate attributeName="r" values="40;60;40" dur="2s" repeatCount="indefinite"/>
+                    </circle>
+                    
+                    <!-- Protective halo forms -->
+                    <circle cx="400" cy="200" r="150" fill="url(#protectiveHalo)">
+                        <animate attributeName="r" values="120;180;120" dur="3s" repeatCount="indefinite"/>
+                        <animate attributeName="opacity" values="0;0.3;0" dur="3s" repeatCount="indefinite"/>
+                    </circle>
+                </g>
+                
+                <!-- Brightened stores group (shown during threat) -->
+                <g id="brightenedStores" opacity="0"></g>
+                
+                <!-- Ambient particles -->
+                <g id="ambientParticles" opacity="0.4"></g>
+                
+                <!-- Status text -->
+                <text x="400" y="350" fill="white" font-size="14" text-anchor="middle" opacity="0.6" font-weight="300" id="statusText">
+                    Connected
+                </text>
+            </svg>
+        </div>
+        
+        <p class="status">
+            <span id="storeCount">17,453</span> stores • <span id="threatStatus">All clear</span>
+        </p>
+        
+        <div class="controls">
+            <button onclick="toggleThreat()">Simulate Threat Response</button>
+        </div>
+    </div>
+
+    <script>
+        let threatActive = false;
+        const svg = document.getElementById('visualization');
+        
+        // Create surrounding stores
+        function createSurroundingStores() {
+            const group = document.getElementById('surroundingStores');
+            
+            for (let i = 0; i < 12; i++) {
+                const angle = (i * 30) * Math.PI / 180;
+                const radius = 120;
+                const x = 400 + Math.cos(angle) * radius;
+                const y = 200 + Math.sin(angle) * radius;
+                const delay = i * 0.3;
+                
+                const storeGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+                
+                // Store light
+                const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                circle.setAttribute('cx', x);
+                circle.setAttribute('cy', y);
+                circle.setAttribute('r', '4');
+                circle.setAttribute('fill', 'white');
+                circle.setAttribute('opacity', '0.6');
+                circle.setAttribute('class', 'normal-store');
+                
+                const animate = document.createElementNS('http://www.w3.org/2000/svg', 'animate');
+                animate.setAttribute('attributeName', 'opacity');
+                animate.setAttribute('values', '0.6;0.8;0.6');
+                animate.setAttribute('dur', '6s');
+                animate.setAttribute('begin', `${delay}s`);
+                animate.setAttribute('repeatCount', 'indefinite');
+                
+                circle.appendChild(animate);
+                
+                // Connection line
+                const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                line.setAttribute('x1', '400');
+                line.setAttribute('y1', '200');
+                line.setAttribute('x2', x);
+                line.setAttribute('y2', y);
+                line.setAttribute('stroke', 'white');
+                line.setAttribute('stroke-width', '0.5');
+                line.setAttribute('opacity', '0.1');
+                
+                storeGroup.appendChild(line);
+                storeGroup.appendChild(circle);
+                group.appendChild(storeGroup);
+            }
+        }
+        
+        // Create brightened stores for threat response
+        function createBrightenedStores() {
+            const group = document.getElementById('brightenedStores');
+            
+            for (let i = 0; i < 5; i++) {
+                const angle = ((i * 72) + 36) * Math.PI / 180;
+                const radius = 80;
+                const x = 400 + Math.cos(angle) * radius;
+                const y = 200 + Math.sin(angle) * radius;
+                
+                const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                circle.setAttribute('cx', x);
+                circle.setAttribute('cy', y);
+                circle.setAttribute('r', '6');
+                circle.setAttribute('fill', 'white');
+                circle.setAttribute('opacity', '0.9');
+                
+                const animateR = document.createElementNS('http://www.w3.org/2000/svg', 'animate');
+                animateR.setAttribute('attributeName', 'r');
+                animateR.setAttribute('values', '4;8;4');
+                animateR.setAttribute('dur', '2s');
+                animateR.setAttribute('repeatCount', 'indefinite');
+                
+                const animateOpacity = document.createElementNS('http://www.w3.org/2000/svg', 'animate');
+                animateOpacity.setAttribute('attributeName', 'opacity');
+                animateOpacity.setAttribute('values', '0.6;1;0.6');
+                animateOpacity.setAttribute('dur', '2s');
+                animateOpacity.setAttribute('repeatCount', 'indefinite');
+                
+                circle.appendChild(animateR);
+                circle.appendChild(animateOpacity);
+                group.appendChild(circle);
+            }
+        }
+        
+        // Create ambient particles
+        function createAmbientParticles() {
+            const group = document.getElementById('ambientParticles');
+            
+            for (let i = 0; i < 20; i++) {
+                const x = Math.random() * 800;
+                const y = Math.random() * 400;
+                const size = Math.random() * 2 + 1;
+                const duration = Math.random() * 10 + 20;
+                
+                const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                circle.setAttribute('cx', x);
+                circle.setAttribute('cy', y);
+                circle.setAttribute('r', size);
+                circle.setAttribute('fill', 'white');
+                circle.setAttribute('opacity', '0.3');
+                
+                const animateTransform = document.createElementNS('http://www.w3.org/2000/svg', 'animateTransform');
+                animateTransform.setAttribute('attributeName', 'transform');
+                animateTransform.setAttribute('type', 'translate');
+                animateTransform.setAttribute('values', '0,0; 10,-10; -10,10; 0,0');
+                animateTransform.setAttribute('dur', `${duration}s`);
+                animateTransform.setAttribute('repeatCount', 'indefinite');
+                
+                circle.appendChild(animateTransform);
+                group.appendChild(circle);
+            }
+        }
+        
+        // Toggle threat simulation
+        function toggleThreat() {
+            threatActive = !threatActive;
+            
+            const threatResponse = document.getElementById('threatResponse');
+            const brightenedStores = document.getElementById('brightenedStores');
+            const statusText = document.getElementById('statusText');
+            const threatStatus = document.getElementById('threatStatus');
+            
+            if (threatActive) {
+                // Show threat response
+                threatResponse.style.transition = 'opacity 1s';
+                threatResponse.style.opacity = '1';
+                
+                brightenedStores.style.transition = 'opacity 1s';
+                brightenedStores.style.opacity = '1';
+                
+                statusText.textContent = 'Protected';
+                threatStatus.textContent = 'Threat detected - Community responding';
+                
+                // Update button
+                event.target.textContent = 'Clear Threat';
+            } else {
+                // Hide threat response
+                threatResponse.style.transition = 'opacity 1s';
+                threatResponse.style.opacity = '0';
+                
+                brightenedStores.style.transition = 'opacity 1s';
+                brightenedStores.style.opacity = '0';
+                
+                statusText.textContent = 'Connected';
+                threatStatus.textContent = 'All clear';
+                
+                // Update button
+                event.target.textContent = 'Simulate Threat Response';
+            }
+        }
+        
+        // Initialize visualization
+        createSurroundingStores();
+        createBrightenedStores();
+        createAmbientParticles();
+    </script>
+</body>
+</html>
