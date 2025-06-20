@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SOS Dashboard Diagrams Generator</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 20px;
+            background: #f5f5f5;
+        }
+        .diagram-container {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h2 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .instructions {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+        button {
+            background: #1976d2;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 10px 5px;
+        }
+        button:hover {
+            background: #1565c0;
+        }
+        .mermaid {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="instructions">
+        <h1>SOS Dashboard Wireframe Diagrams</h1>
+        <p><strong>To save as PNG:</strong></p>
+        <ol>
+            <li>Right-click on each diagram</li>
+            <li>Select "Save Image As..." or "Copy Image"</li>
+            <li>Save with the suggested filename</li>
+        </ol>
+        <p>Or use the buttons to open each diagram in a new tab for easier saving.</p>
+    </div>
+
+    <div class="diagram-container">
+        <h2>1. Big Numbers Design - All Tabs</h2>
+        <button onclick="openDiagram('diagram1')">Open in New Tab</button>
+        <div class="mermaid" id="diagram1">
+graph TB
+    subgraph "Tab 1: Friction → Conversion (Hero Screen)"
+        A1[Header: Fashion Boutique Demo - Live Dashboard]
+        A2["<b>+47%</b><br/>Conversion Lift<br/><i>Big Green Arrow Up</i>"]
+        A3["$127,384<br/>Additional Revenue This Month"]
+        A4[Mini Chart: Conversion Rate Over Time]
+        A5["Good Actor Experience: 98% | Bad Actors Blocked: 99.2%"]
+        A6["Swipe for more →"]
+        
+        A1 --> A2
+        A2 --> A3
+        A3 --> A4
+        A4 --> A5
+        A5 --> A6
+    end
+
+    subgraph "Tab 2: Network Intelligence"
+        B1["<b>1.2M</b><br/>Verifications Recycled"]
+        B2["73% Skip Verification<br/><i>Network Effect in Action</i>"]
+        B3[Visual: Network Map Showing Connections]
+        B4["2.3 Seconds<br/>Average Time Saved"]
+        B5[Tap for Details: Network Growth Timeline]
+        
+        B1 --> B2
+        B2 --> B3
+        B3 --> B4
+        B4 --> B5
+    end
+
+    subgraph "Tab 3: Visitor Intelligence"
+        C1[Visitor Breakdown Pie Chart]
+        C2["VIP/Trusted: 18%<br/>→ 55% Conversion"]
+        C3["New Visitors: 72%<br/>→ 14% Conversion"]
+        C4["Blocked/Bots: 10%<br/>→ 0% Conversion"]
+        C5[Live Feed: Recent Visitor Decisions]
+        
+        C1 --> C2
+        C1 --> C3
+        C1 --> C4
+        C2 --> C5
+        C3 --> C5
+        C4 --> C5
+    end
+
+    subgraph "Tab 4: AI Automation"
+        D1["<b>14,237</b><br/>Decisions Today"]
+        D2["312 Hours Saved<br/>This Month"]
+        D3["Accuracy: 99.7%<br/><i>AI Performance</i>"]
+        D4["$18,420/month<br/>Saved vs Manual Review"]
+        D5[Activity Log: Recent AI Actions]
+        
+        D1 --> D2
+        D2 --> D3
+        D3 --> D4
+        D4 --> D5
+    end
+        </div>
+    </div>
+
+    <div class="diagram-container">
+        <h2>2. Visual Metaphor Design - All Tabs</h2>
+        <button onclick="openDiagram('diagram2')">Open in New Tab</button>
+        <div class="mermaid" id="diagram2">
+graph TB
+    subgraph "Tab 1: Conversion Speedometer"
+        E1[Fashion Boutique Demo]
+        E2["🚗 Speedometer Visual<br/>Needle in Green Zone"]
+        E3["Before: 2.9% | After: 4.3%<br/><i>Toggle to Compare</i>"]
+        E4["💰 Revenue Thermometer<br/>+$127K Filling Up"]
+        E5["🚦 Traffic Light<br/>🟢 Good 🟡 Unknown 🔴 Bad"]
+        
+        E1 --> E2
+        E2 --> E3
+        E3 --> E4
+        E4 --> E5
+    end
+
+    subgraph "Tab 2: Network Visualization"
+        F1["🌐 Network Animation<br/>Nodes Connecting"]
+        F2["♻️ 73% Recycled<br/>Circular Progress"]
+        F3["⏱️ Time Saved<br/>-2.3 seconds"]
+        F4["🗺️ Coverage Map<br/>Heat Map of Stores"]
+        
+        F1 --> F2
+        F2 --> F3
+        F3 --> F4
+    end
+
+    subgraph "Tab 3: Airport Security Lanes"
+        G1["✈️ Security Checkpoint Visual"]
+        G2["Fast Lane → VIP Express<br/>18% of traffic"]
+        G3["Regular Lane → Standard Check<br/>72% of traffic"]
+        G4["Security → Detailed Screen<br/>8% suspicious"]
+        G5["⛔ No Entry → Blocked<br/>2% threats"]
+        
+        G1 --> G2
+        G1 --> G3
+        G1 --> G4
+        G1 --> G5
+    end
+
+    subgraph "Tab 4: AI Robot at Work"
+        H1["🤖 Robot Animation<br/>Processing Visitors"]
+        H2["📦 Conveyor Belt<br/>Automated Decisions"]
+        H3["🎯 Accuracy Target<br/>99.7% Bullseye"]
+        H4["💰 Money Bag<br/>Savings Accumulating"]
+        
+        H1 --> H2
+        H2 --> H3
+        H3 --> H4
+    end
+        </div>
+    </div>
+
+    <div class="diagram-container">
+        <h2>3. Interaction Flow</h2>
+        <button onclick="openDiagram('diagram3')">Open in New Tab</button>
+        <div class="mermaid" id="diagram3">
+sequenceDiagram
+    participant Investor
+    participant Dashboard
+    participant DetailView
+
+    Note over Investor,Dashboard: Initial View - iPad Demo
+    Investor->>Dashboard: Sees +47% Conversion Lift
+    Note over Dashboard: Big number catches attention
+    
+    Note over Investor,Dashboard: Exploration Phase
+    Investor->>Dashboard: Taps on +47% metric
+    Dashboard->>DetailView: Reveals conversion breakdown
+    DetailView-->>Investor: Trusted: 55%, New: 14%, Blocked: 0%
+    Note over Investor: "Interesting segmentation!"
+    
+    Note over Investor,Dashboard: Comparison Mode
+    Investor->>Dashboard: Toggles "Without SOS"
+    Dashboard-->>Investor: Shows baseline 2.9%
+    Dashboard-->>Investor: Highlights +47% improvement
+    Note over Investor: "Significant impact!"
+    
+    Note over Investor,Dashboard: Discovery Journey
+    Investor->>Dashboard: Swipes to Network tab
+    Dashboard-->>Investor: Shows 1.2M recycled verifications
+    Note over Investor: "Network effect - scalable!"
+    
+    Investor->>Dashboard: Swipes to Visitor Intel
+    Dashboard-->>Investor: Shows segmentation strategy
+    Note over Investor: "Smart targeting!"
+    
+    Investor->>Dashboard: Swipes to AI Automation
+    Dashboard-->>Investor: Shows 14K daily decisions
+    Note over Investor: "Fully automated - impressive!"
+        </div>
+    </div>
+
+    <div class="diagram-container">
+        <h2>4. Screen Layout - Tab 1 Detail</h2>
+        <button onclick="openDiagram('diagram4')">Open in New Tab</button>
+        <div class="mermaid" id="diagram4">
+graph TD
+    subgraph "iPad Screen Layout - Conversion Impact Tab"
+        Header["Fashion Boutique Demo 
+        <i>Demo Mode</i> | With SOS ✓ | Without ○"]
+        
+        MainMetric["<span style='font-size:72px'>+47%</span>
+        Conversion Lift
+        <i>Tap for details</i>"]
+        
+        Revenue["💰 $127,384
+        Additional Revenue This Month"]
+        
+        Chart["📈 Conversion Trend
+        ━━━━━━━━━━
+        Before: ──── 2.9%
+        After:  ━━━━ 4.3%"]
+        
+        Cards["🟢 Good Actors: 98% Happy | 🔴 Bad Actors: 99.2% Blocked"]
+        
+        SwipeHint["← Swipe for Network Intelligence →"]
+        
+        Header --> MainMetric
+        MainMetric --> Revenue
+        Revenue --> Chart
+        Chart --> Cards
+        Cards --> SwipeHint
+    end
+        </div>
+    </div>
+
+    <div class="diagram-container">
+        <h2>5. Drill-Down View Example</h2>
+        <button onclick="openDiagram('diagram5')">Open in New Tab</button>
+        <div class="mermaid" id="diagram5">
+graph TD
+    subgraph "Tapped State - Conversion Breakdown"
+        BackButton["← Back to Overview"]
+        
+        Title["How We Achieve +47% Lift"]
+        
+        Segment1["🟢 Trusted Visitors (18%)
+        Old: 28% conversion
+        New: 55% conversion
+        <b>+92% improvement</b>"]
+        
+        Segment2["🟡 New Visitors (72%)
+        Old: 12% conversion
+        New: 14% conversion
+        <b>+20% improvement</b>"]
+        
+        Segment3["🔴 Blocked Threats (10%)
+        Old: 2% conversion (fraud)
+        New: 0% conversion
+        <b>-100% fraud eliminated</b>"]
+        
+        Formula["Weighted Average
+        (0.18 × 55%) + (0.72 × 14%) + (0.10 × 0%)
+        = <b>19.9% total conversion</b>
+        vs 13.5% baseline = <b>+47% lift</b>"]
+        
+        BackButton --> Title
+        Title --> Segment1
+        Title --> Segment2
+        Title --> Segment3
+        Segment1 --> Formula
+        Segment2 --> Formula
+        Segment3 --> Formula
+    end
+        </div>
+    </div>
+
+    <script>
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'default',
+            themeVariables: {
+                primaryColor: '#f3f4f6',
+                primaryTextColor: '#1f2937',
+                primaryBorderColor: '#e5e7eb',
+                lineColor: '#6b7280',
+                secondaryColor: '#10b981',
+                tertiaryColor: '#3b82f6',
+                background: '#ffffff',
+                mainBkg: '#f9fafb',
+                secondBkg: '#f3f4f6',
+                tertiaryBkg: '#e5e7eb'
+            },
+            flowchart: {
+                useMaxWidth: true,
+                htmlLabels: true,
+                rankSpacing: 80,
+                nodeSpacing: 80,
+                curve: 'basis'
+            },
+            sequence: {
+                showSequenceNumbers: false,
+                actorMargin: 50,
+                messageMargin: 30,
+                boxMargin: 10,
+                boxTextMargin: 5,
+                noteMargin: 10,
+                messageAlign: 'center',
+                mirrorActors: false
+            }
+        });
+
+        function openDiagram(diagramId) {
+            const svg = document.querySelector(`#${diagramId} svg`);
+            const svgData = new XMLSerializer().serializeToString(svg);
+            const svgBlob = new Blob([svgData], {type: 'image/svg+xml;charset=utf-8'});
+            const svgUrl = URL.createObjectURL(svgBlob);
+            window.open(svgUrl);
+        }
+    </script>
+</body>
+</html>
