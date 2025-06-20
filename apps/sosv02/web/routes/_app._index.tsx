@@ -24,11 +24,11 @@ import {
   Spinner
 } from '@shopify/polaris';
 import {
-  CashDollarIcon,
-  OrderIcon,
-  AlertCircleIcon,
-  TeamIcon,
-  SearchIcon
+  CashDollarMajor,
+  OrderMajor,
+  AlertCircleMajor,
+  TeamMajor,
+  SearchMajor
 } from '@shopify/polaris-icons';
 import { useState, useCallback, useEffect } from 'react';
 import { useLoaderData } from "@remix-run/react";
@@ -480,7 +480,7 @@ export default function Dashboard() {
         <Button
           onClick={toggleNotifications}
           variant="plain"
-          icon={AlertCircleIcon}
+          icon={AlertCircleMajor}
           accessibilityLabel="Notifications"
         >
           {notificationCount > 0 && (
@@ -498,7 +498,7 @@ export default function Dashboard() {
   ) : (
     <Button
       variant="plain"
-      icon={AlertCircleIcon}
+      icon={AlertCircleMajor}
       accessibilityLabel="Notifications"
       disabled
     />
@@ -603,7 +603,7 @@ export default function Dashboard() {
               <Box padding="400">
                 <BlockStack gap="200">
                   <InlineStack gap="200" blockAlign="center">
-                    <Icon source={CashDollarIcon} tone="success" />
+                    <Icon source={CashDollarMajor} tone="success" />
                     <Text variant="headingMd" as="h3">Today's Sales</Text>
                   </InlineStack>
                   <Text variant="heading2xl" as="p" fontWeight="bold">{salesData}</Text>
@@ -616,7 +616,7 @@ export default function Dashboard() {
               <Box padding="400">
                 <BlockStack gap="200">
                   <InlineStack gap="200" blockAlign="center">
-                    <Icon source={OrderIcon} tone="base" />
+                    <Icon source={OrderMajor} tone="base" />
                     <Text variant="headingMd" as="h3">Orders Today</Text>
                   </InlineStack>
                   <Text variant="heading2xl" as="p" fontWeight="bold">{ordersToday}</Text>
@@ -629,7 +629,7 @@ export default function Dashboard() {
               <Box padding="400">
                 <BlockStack gap="200">
                   <InlineStack gap="200" blockAlign="center">
-                    <Icon source={AlertCircleIcon} tone="success" />
+                    <Icon source={AlertCircleMajor} tone="success" />
                     <Text variant="headingMd" as="h3">Network Risk</Text>
                   </InlineStack>
                   <Text variant="heading2xl" as="p" fontWeight="bold">{riskScore}</Text>
@@ -642,7 +642,7 @@ export default function Dashboard() {
               <Box padding="400">
                 <BlockStack gap="200">
                   <InlineStack gap="200" blockAlign="center">
-                    <Icon source={TeamIcon} tone="magic" />
+                    <Icon source={TeamMajor} tone="magic" />
                     <Text variant="headingMd" as="h3">Network Size</Text>
                   </InlineStack>
                   <Text variant="heading2xl" as="p" fontWeight="bold">{networkSize}</Text>
@@ -660,7 +660,7 @@ export default function Dashboard() {
                   <BlockStack gap="400">
                     <InlineStack align="space-between" blockAlign="center">
                       <InlineStack gap="200" blockAlign="center">
-                        <Icon source={CashDollarIcon} tone="base" />
+                        <Icon source={CashDollarMajor} tone="base" />
                         <Text variant="headingMd" as="h3">Sales Trend</Text>
                       </InlineStack>
                       <Badge tone="success">+15%</Badge>
@@ -680,7 +680,7 @@ export default function Dashboard() {
                   <BlockStack gap="400">
                     <InlineStack gap="200" blockAlign="center" align="space-between">
                       <InlineStack gap="200" blockAlign="center">
-                        <Icon source={SearchIcon} tone="interactive" />
+                        <Icon source={SearchMajor} tone="interactive" />
                         <Text variant="headingLg" as="h2">AI Store Assistant</Text>
                       </InlineStack>
                       <Badge tone="info">Beta</Badge>
