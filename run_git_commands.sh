@@ -1,0 +1,2 @@
+#!/bin/sh
+cd /Users/jarvis/Downloads/development/SOS && git checkout -b feature/issue-15-phase-1-documentation--product-vision--- 2>/dev/null || git checkout feature/issue-15-phase-1-documentation--product-vision--- && git add docs/product/ && git commit -F /Users/jarvis/Downloads/development/SOS/COMMIT_MESSAGE_ISSUE_15.txt && git push -u origin feature/issue-15-phase-1-documentation--product-vision--- && echo "Commands executed"

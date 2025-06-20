@@ -1,0 +1,17 @@
+===============================================
+     ATTENTION: AI AGENT - START HERE
+===============================================
+
+You are an AI agent working on the SOS project.
+
+Run these 4 commands in order:
+
+1. ./scripts/ai-status
+2. cat AI_PROJECT_MANAGER.md  
+3. gh issue list --label "priority:high" --state open
+4. ./scripts/task start <issue-number>
+
+That's it. You're now working on the project.
+
+Full guide: START_HERE_AI_AGENT.md
+===============================================
