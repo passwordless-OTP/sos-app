@@ -105,3 +105,43 @@ npm run build
 - Follow usage-based pricing model for API calls
 - The Gadget.dev framework handles Shopify OAuth and webhooks automatically
 - Use Gadget's built-in session management for authentication
+
+## Recent Work (2025-06-17)
+- **Network Intelligence Dashboard**: Completed comprehensive dashboard with real-time visualizations
+- **Customer Risk Intelligence**: Shows health scores and network-flagged customers
+- **Network Economics**: Live signal flow (PROBE, TRUST, BLOCK, FLAG) with 3,247 signals/sec
+- **Visualizations**: Created 6 concepts including Jony Ive-inspired "Community Protection"
+- **Key Files Modified**: 
+  - `/apps/sosv02/web/routes/_app._index.tsx` - Main dashboard (717+ lines added)
+  - Created `jony-ive-demo.html` for standalone demo
+- **Architecture Docs**: Created ARCHITECTURE_VISUAL.md and ARCHITECTURE_PROBLEMS.md
+
+## SOS File Naming Convention
+
+Follow DNS-style naming for all SOS files:
+
+### Structure: `[namespace].[category].[feature].[descriptor].[extension]`
+
+### Examples:
+- `sos.dashboard.investor-demo.wireframe.[BIG-NUMBERS].png`
+- `sos.api.fraud-check.[MAIN].ts`
+- `sos.docs.product.vision-mission.[VMS-VARIANT].md`
+- `sos.config.gadget.settings.[DEVELOPMENT].ts`
+- `sos.analytics.conversion-metrics.[2025-01-17].csv`
+- `sos.components.dashboard.friction-tab.[REACT].tsx`
+
+### SOS-Specific Categories:
+- **sos.api**: API actions and models
+- **sos.docs**: Documentation files
+- **sos.config**: Configuration files
+- **sos.components**: React components
+- **sos.services**: Microservices
+- **sos.tests**: Test files
+- **sos.analytics**: Analytics and metrics
+- **sos.security**: Security-related files
+
+### Benefits for SOS:
+- Easy to identify SOS files vs other projects
+- Clear module organization
+- Consistent with Gadget.dev structure
+- Supports versioning and variants
