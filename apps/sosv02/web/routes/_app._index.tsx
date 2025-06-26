@@ -100,11 +100,20 @@ declare global {
 export const clientOnly = true;
 
 export const loader = async ({ context }: LoaderFunctionArgs) => {
-  const shop = context.session?.get("shop");
-  return json({
-    shopId: shop?.id || null,
-    shopDomain: shop?.domain || null
-  });
+  try {
+    // For Gadget apps, we'll use default values for now
+    // TODO: Implement proper Gadget session handling
+    return json({
+      shopId: "demo-shop-id",
+      shopDomain: "dev-sandbox-vk.myshopify.com"
+    });
+  } catch (error) {
+    console.error("Loader error:", error);
+    return json({
+      shopId: null,
+      shopDomain: null
+    });
+  }
 };
 
 // Chart data interface

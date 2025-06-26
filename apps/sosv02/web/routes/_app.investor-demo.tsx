@@ -56,8 +56,9 @@ const DEMO_DATA = {
 
 export const loader = async ({ request, context }: LoaderFunctionArgs) => {
   try {
-    // Get shop domain from session or use demo
-    const shopDomain = context.session?.shop?.domain || "fashion-boutique-demo.myshopify.com";
+    // For Gadget apps, use demo shop domain
+    // TODO: Implement proper Gadget session handling
+    const shopDomain = "fashion-boutique-demo.myshopify.com";
     
     return json({
       shopDomain
