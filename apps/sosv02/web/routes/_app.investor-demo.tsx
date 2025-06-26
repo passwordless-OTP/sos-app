@@ -21,8 +21,8 @@ import {
   RefreshMajor,
   CustomersMajor,
   AutomationMajor,
-  ChevronRightMinor,
-  ChevronLeftMinor
+  ChevronRight,
+  ChevronLeft
 } from '@shopify/polaris-icons';
 import { useState, useCallback } from 'react';
 import { json, type LoaderFunctionArgs } from "@remix-run/node";
@@ -437,11 +437,11 @@ export default function InvestorDemo() {
         <Layout.Section>
           <Box padding="400">
             <InlineStack align="center" gap="200">
-              <Icon source={ChevronLeftMinor} tone="subdued" />
+              <Icon source={ChevronLeft} tone="subdued" />
               <Text variant="bodySm" tone="subdued" alignment="center">
                 Swipe between tabs
               </Text>
-              <Icon source={ChevronRightMinor} tone="subdued" />
+              <Icon source={ChevronRight} tone="subdued" />
             </InlineStack>
           </Box>
         </Layout.Section>
