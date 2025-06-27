@@ -54,8 +54,8 @@ const DEMO_DATA = {
   }
 };
 
-export const loader = async ({ context }: LoaderFunctionArgs) => {
-  // For demo purposes, just return hardcoded value
+export const loader = async () => {
+  // Simple loader without context for demo
   return json({
     shopDomain: "fashion-boutique-demo.myshopify.com"
   });

@@ -97,9 +97,8 @@ declare global {
 }
 
 
-export const loader = async ({ context }: LoaderFunctionArgs) => {
-  // For demo purposes, just return hardcoded values
-  // Real app would use context.gadgetConfig for shop data
+export const loader = async () => {
+  // Simple loader without context for demo
   return json({
     shopId: "demo-shop-id",
     shopDomain: "dev-sandbox-vk.myshopify.com"
