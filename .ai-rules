@@ -1,0 +1,36 @@
+# SOS Project AI Rules (Quick Reference)
+
+## NEVER
+- Assume library exports exist
+- Use context.session in loaders  
+- Use ggt deploy (broken)
+- Make multiple changes without testing
+- Create files unless absolutely necessary
+
+## ALWAYS  
+- Verify imports with grep first
+- Test after EVERY change
+- Use simple loaders for demos
+- Check logs for "Pushed file"
+- Keep ggt dev running
+
+## ICONS (Polaris v9)
+- End with "Icon" suffix
+- No "Major/Minor" suffixes
+- TeamIcon NOT CustomersMajor
+- ChartLineIcon NOT AnalyticsMajor
+
+## QUICK FIXES
+```bash
+# Wrong icon? Find correct name:
+grep -h "Icon.*from.*polaris" web/routes/*.tsx
+
+# 500 error? Check logs:
+tail -20 /tmp/ggt-dev.log | grep ERROR
+
+# Not syncing? Restart:
+pkill -f ggt && ./scripts/dev-start.sh
+```
+
+## TEST COMMAND
+curl -I -s https://sosv02--development.gadget.app/[route] | head -1
