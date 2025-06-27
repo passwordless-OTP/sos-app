@@ -17,9 +17,9 @@ import {
   Icon
 } from '@shopify/polaris';
 import {
-  AnalyticsIcon,
+  ChartLineIcon,
   RefreshIcon,
-  CustomersIcon,
+  TeamIcon,
   AutomationIcon,
   ChevronRightIcon,
   ChevronLeftIcon
@@ -78,7 +78,7 @@ export default function InvestorDemo() {
     {
       id: 'conversion',
       content: 'Conversion Impact',
-      icon: AnalyticsIcon,
+      icon: ChartLineIcon,
     },
     {
       id: 'network',
@@ -88,7 +88,7 @@ export default function InvestorDemo() {
     {
       id: 'visitors',
       content: 'Visitor Intel',
-      icon: CustomersIcon,
+      icon: TeamIcon,
     },
     {
       id: 'ai',
@@ -131,7 +131,7 @@ export default function InvestorDemo() {
               <Text variant="heading2xl" tone="success">{data.revenue}</Text>
             </BlockStack>
             <Box>
-              <Icon source={AnalyticsIcon} tone="success" />
+              <Icon source={ChartLineIcon} tone="success" />
             </Box>
           </InlineStack>
         </Box>
