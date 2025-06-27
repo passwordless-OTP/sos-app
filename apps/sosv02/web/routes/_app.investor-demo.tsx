@@ -25,7 +25,8 @@ import {
   ChevronLeftIcon
 } from '@shopify/polaris-icons';
 import { useState, useCallback } from 'react';
-// Gadget apps don't use Remix - removed Remix imports
+import { json, type LoaderFunctionArgs } from "@remix-run/node";
+import { useLoaderData } from "@remix-run/react";
 
 // Demo data for investor presentation
 const DEMO_DATA = {
@@ -53,8 +54,17 @@ const DEMO_DATA = {
   }
 };
 
+export const loader = async ({ context }: LoaderFunctionArgs) => {
+  // In Gadget, shop data comes from context.gadgetConfig
+  const shopDomain = context.gadgetConfig?.shopId || "fashion-boutique-demo.myshopify.com";
+  
+  return json({
+    shopDomain
+  });
+};
+
 export default function InvestorDemo() {
-  const shopDomain = "fashion-boutique-demo.myshopify.com";
+  const { shopDomain } = useLoaderData<typeof loader>();
   const [selectedTab, setSelectedTab] = useState(0);
   const [showWithSOS, setShowWithSOS] = useState(true);
   const [showDetails, setShowDetails] = useState(false);

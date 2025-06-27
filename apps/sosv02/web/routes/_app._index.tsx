@@ -31,7 +31,8 @@ import {
   SearchIcon
 } from '@shopify/polaris-icons';
 import { useState, useCallback, useEffect } from 'react';
-// Gadget apps don't use Remix - removed Remix imports
+import { useLoaderData } from "@remix-run/react";
+import { json, type LoaderFunctionArgs } from "@remix-run/node";
 import { api } from '../api';
 
 // Speech Recognition API type declarations
@@ -96,8 +97,15 @@ declare global {
 }
 
 
-// Gadget apps don't use traditional Remix loaders
-// Session data is handled by Gadget framework
+export const loader = async ({ context }: LoaderFunctionArgs) => {
+  // In Gadget, shop data comes from context.gadgetConfig
+  const shopDomain = context.gadgetConfig?.shopId || "dev-sandbox-vk.myshopify.com";
+  
+  return json({
+    shopId: "demo-shop-id",
+    shopDomain: shopDomain
+  });
+};
 
 // Chart data interface
 interface ChartDataItem {
@@ -151,8 +159,7 @@ function SimpleLineChart({ data, title }: SimpleLineChartProps) {
 export default function Dashboard() {
   console.log('[SOS Dashboard] Component mounting...');
   // For demo purposes
-  const shopId = "demo-shop-id";
-  const shopDomain = "dev-sandbox-vk.myshopify.com";
+  const { shopId, shopDomain } = useLoaderData<typeof loader>();
   const [query, setQuery] = useState('');
   const [aiResponse, setAiResponse] = useState('');
   const [loading, setLoading] = useState(false);
