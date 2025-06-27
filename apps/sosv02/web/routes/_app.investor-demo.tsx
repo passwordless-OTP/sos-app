@@ -141,7 +141,7 @@ export default function InvestorDemo() {
               <Text variant="heading2xl" tone="success">{data.revenue}</Text>
             </BlockStack>
             <Box>
-              <Icon source={AnalyticsMajor} tone="success" />
+              <Icon source={AnalyticsIcon} tone="success" />
             </Box>
           </InlineStack>
         </Box>
@@ -260,7 +260,7 @@ export default function InvestorDemo() {
               <Text variant="heading2xl">2.3 Seconds</Text>
             </BlockStack>
             <Box>
-              <Icon source={RefreshMajor} tone="success" />
+              <Icon source={RefreshIcon} tone="success" />
             </Box>
           </InlineStack>
         </Box>
@@ -381,7 +381,7 @@ export default function InvestorDemo() {
               <Text variant="bodySm">vs Manual Review</Text>
             </BlockStack>
             <Box>
-              <Icon source={AutomationMajor} tone="success" />
+              <Icon source={AutomationIcon} tone="success" />
             </Box>
           </InlineStack>
         </Box>
