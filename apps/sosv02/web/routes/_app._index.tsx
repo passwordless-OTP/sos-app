@@ -96,14 +96,12 @@ declare global {
   }
 }
 
-// Disable server-side rendering for this route
-export const clientOnly = true;
 
-export const loader = async ({ context }: LoaderFunctionArgs) => {
-  const shop = context.session?.get("shop");
+export const loader = async () => {
+  // Simple loader without context for demo
   return json({
-    shopId: shop?.id || null,
-    shopDomain: shop?.domain || null
+    shopId: "demo-shop-id",
+    shopDomain: "dev-sandbox-vk.myshopify.com"
   });
 };
 
@@ -158,6 +156,7 @@ function SimpleLineChart({ data, title }: SimpleLineChartProps) {
 
 export default function Dashboard() {
   console.log('[SOS Dashboard] Component mounting...');
+  // For demo purposes
   const { shopId, shopDomain } = useLoaderData<typeof loader>();
   const [query, setQuery] = useState('');
   const [aiResponse, setAiResponse] = useState('');

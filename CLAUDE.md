@@ -74,6 +74,46 @@ npm run dev
 npm run build
 ```
 
+## Critical Development Rules
+
+### 1. Never Assume - Always Verify
+- NEVER assume a library export exists (e.g., icon names, functions)
+- NEVER guess at API signatures or property names
+- ALWAYS check existing working code for patterns
+
+### 2. Copy Working Examples
+```bash
+# Before importing anything new:
+grep -r "from '@shopify/polaris-icons'" . | head -20
+# Copy EXACTLY what works - don't modify
+
+# For Polaris Icons specifically (v9.x):
+# All icons end with "Icon" suffix: 
+# ✓ AnalyticsIcon, RefreshIcon, CustomersIcon
+# ✗ AnalyticsMajor, RefreshMinor (old naming)
+```
+
+### 3. Automated Verification After EVERY Change
+```bash
+# After ANY edit (even "trivial" ones):
+npm run typecheck  # Catches import/type errors instantly
+npm run lint       # Catches syntax errors
+npm run build      # Full compilation check
+
+# NEVER batch multiple changes without testing
+```
+
+### 4. Trust the Tools
+- If TypeScript says it doesn't exist, it doesn't exist
+- Don't argue with "module not found" errors
+- The compiler knows better than your assumptions
+
+### 5. Fail Fast Philosophy
+- Make ONE atomic change
+- Test immediately
+- Only proceed if green
+- This prevents cascading errors and saves debugging time
+
 ## Project Structure
 
 ### Outer Repository (/)
