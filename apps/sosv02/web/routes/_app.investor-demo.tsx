@@ -17,12 +17,12 @@ import {
   Icon
 } from '@shopify/polaris';
 import {
-  AnalyticsMajor,
-  RefreshMajor,
-  CustomersMajor,
-  AutomationMajor,
-  ChevronRight,
-  ChevronLeft
+  AnalyticsIcon,
+  RefreshIcon,
+  CustomersIcon,
+  AutomationIcon,
+  ChevronRightIcon,
+  ChevronLeftIcon
 } from '@shopify/polaris-icons';
 import { useState, useCallback } from 'react';
 import { json, type LoaderFunctionArgs } from "@remix-run/node";
@@ -88,22 +88,22 @@ export default function InvestorDemo() {
     {
       id: 'conversion',
       content: 'Conversion Impact',
-      icon: AnalyticsMajor,
+      icon: AnalyticsIcon,
     },
     {
       id: 'network',
       content: 'Network Effect',
-      icon: RefreshMajor,
+      icon: RefreshIcon,
     },
     {
       id: 'visitors',
       content: 'Visitor Intel',
-      icon: CustomersMajor,
+      icon: CustomersIcon,
     },
     {
       id: 'ai',
       content: 'AI Automation',
-      icon: AutomationMajor,
+      icon: AutomationIcon,
     },
   ];
 
@@ -437,11 +437,11 @@ export default function InvestorDemo() {
         <Layout.Section>
           <Box padding="400">
             <InlineStack align="center" gap="200">
-              <Icon source={ChevronLeft} tone="subdued" />
+              <Icon source={ChevronLeftIcon} tone="subdued" />
               <Text variant="bodySm" tone="subdued" alignment="center">
                 Swipe between tabs
               </Text>
-              <Icon source={ChevronRight} tone="subdued" />
+              <Icon source={ChevronRightIcon} tone="subdued" />
             </InlineStack>
           </Box>
         </Layout.Section>
