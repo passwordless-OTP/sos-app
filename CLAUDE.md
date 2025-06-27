@@ -86,6 +86,11 @@ npm run build
 # Before importing anything new:
 grep -r "from '@shopify/polaris-icons'" . | head -20
 # Copy EXACTLY what works - don't modify
+
+# For Polaris Icons specifically (v9.x):
+# All icons end with "Icon" suffix: 
+# ✓ AnalyticsIcon, RefreshIcon, CustomersIcon
+# ✗ AnalyticsMajor, RefreshMinor (old naming)
 ```
 
 ### 3. Automated Verification After EVERY Change
