@@ -98,12 +98,11 @@ declare global {
 
 
 export const loader = async ({ context }: LoaderFunctionArgs) => {
-  // In Gadget, shop data comes from context.gadgetConfig
-  const shopDomain = context.gadgetConfig?.shopId || "dev-sandbox-vk.myshopify.com";
-  
+  // For demo purposes, just return hardcoded values
+  // Real app would use context.gadgetConfig for shop data
   return json({
     shopId: "demo-shop-id",
-    shopDomain: shopDomain
+    shopDomain: "dev-sandbox-vk.myshopify.com"
   });
 };
 

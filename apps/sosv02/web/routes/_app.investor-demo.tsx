@@ -55,11 +55,9 @@ const DEMO_DATA = {
 };
 
 export const loader = async ({ context }: LoaderFunctionArgs) => {
-  // In Gadget, shop data comes from context.gadgetConfig
-  const shopDomain = context.gadgetConfig?.shopId || "fashion-boutique-demo.myshopify.com";
-  
+  // For demo purposes, just return hardcoded value
   return json({
-    shopDomain
+    shopDomain: "fashion-boutique-demo.myshopify.com"
   });
 };
 
